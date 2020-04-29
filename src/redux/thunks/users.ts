@@ -1,6 +1,6 @@
 import {
     authenticateUser,
-    getUserWallets,
+    getUserWallets, getWalletWalletBalance,
     registerUser,
     resetPassword,
     resetPasswordRequest, updateUser
@@ -16,7 +16,7 @@ import {
     failLoginForm, failOptionsForm,
     failRegisterForm, failResetForm,
     failResetRequestForm,
-    loginUser, logoutUser,
+    loginUser, logoutUser, setWallets,
     submitLoginForm, submitOptionsForm,
     submitRegisterForm, submitResetForm,
     submitResetRequestForm,
@@ -27,6 +27,9 @@ import {
 import {clearStorage, setAccessToken} from "../../helpers/local-storage";
 import {resetApp} from "../actions/app";
 import {State} from "../store";
+import Wallet, {WalletType} from "../../types/Wallet";
+import {resetWallet, setWalletState} from "../actions/wallet";
+import {createWalletState} from "../reducers/wallet";
 
 export const loginUserThunk = (userLoginFormData: UserLoginFormData) => (dispatch: (arg0: any) => void) => {
     dispatch(submitLoginForm());
@@ -48,7 +51,8 @@ export const loginUserThunk = (userLoginFormData: UserLoginFormData) => (dispatc
 export const logoutUserThunk = () => (dispatch: (arg0: any) => void) => {
     clearStorage();
     dispatch(logoutUser());
-    dispatch(resetApp())
+    dispatch(resetApp());
+    dispatch(resetWallet());
 };
 
 export const registerUserThunk = (userRegisterFormData: UserRegisterFormData) => (dispatch: (arg0: any) => void) => {
@@ -106,5 +110,54 @@ export const updateUserThunk = (userOptionsFormData: UserOptionsFormData) => (di
         dispatch(successOptionsForm())
     }).catch(() => {
         dispatch(failOptionsForm())
+    });
+};
+
+export const updateWalletBalanceThunk = (type: WalletType, publicAddress: string) => (dispatch: (arg0: any) => void, getState: () => State) => {
+
+    const user = getState().user.appUser;
+    if (user === null) {
+        return;
+    }
+
+    const walletState = getState().wallet.states[type][publicAddress] || createWalletState();
+    dispatch(setWalletState(type, publicAddress, {
+        ...walletState,
+        getBalance: {
+            ...walletState.getBalance,
+            wasSubmitted: true,
+            isSubmitting: true
+        }
+    }));
+    getWalletWalletBalance(user.accessToken, publicAddress, type).then((balance: string) => {
+        const wallets = user.wallets.map((wallet: Wallet) => {
+            if (wallet.walletType === type && wallet.publicAddress === publicAddress) {
+                return {
+                    ...wallet,
+                    lastKnownBalance: balance
+                } as Wallet
+            }
+            return wallet
+        });
+        dispatch(setWallets(wallets));
+        dispatch(setWalletState(type, publicAddress, {
+            ...walletState,
+            getBalance: {
+                ...walletState.getBalance,
+                wasSubmitted: true,
+                isSubmitting: false,
+                isSuccess: true
+            }
+        }));
+    }).catch(() => {
+        dispatch(setWalletState(type, publicAddress, {
+            ...walletState,
+            getBalance: {
+                ...walletState.getBalance,
+                wasSubmitted: true,
+                isSubmitting: false,
+                isSuccess: false
+            }
+        }));
     });
 };

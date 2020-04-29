@@ -6,20 +6,26 @@ import User, {
     UserResetRequestForm
 } from "../../types/User";
 import {
-    FAIL_LOGIN_FORM, FAIL_OPTIONS_FORM,
+    FAIL_LOGIN_FORM,
+    FAIL_OPTIONS_FORM,
     FAIL_REGISTER_FORM,
-    FAIL_RESET_FORM, FAIL_RESET_REQUEST_FORM,
+    FAIL_RESET_FORM,
+    FAIL_RESET_REQUEST_FORM,
     LOGIN_USER,
     LOGOUT_USER,
-    SUBMIT_LOGIN_FORM, SUBMIT_OPTIONS_FORM,
+    SET_WALLETS,
+    SUBMIT_LOGIN_FORM,
+    SUBMIT_OPTIONS_FORM,
     SUBMIT_REGISTER_FORM,
     SUBMIT_RESET_FORM,
     SUBMIT_RESET_REQUEST_FORM,
-    SUCCESS_LOGIN_FORM, SUCCESS_OPTIONS_FORM,
+    SUCCESS_LOGIN_FORM,
+    SUCCESS_OPTIONS_FORM,
     SUCCESS_REGISTER_FORM,
     SUCCESS_RESET_FORM,
     SUCCESS_RESET_REQUEST_FORM,
-    UPDATE_LOGIN_FORM, UPDATE_OPTIONS_FORM,
+    UPDATE_LOGIN_FORM,
+    UPDATE_OPTIONS_FORM,
     UPDATE_REGISTER_FORM,
     UPDATE_RESET_FORM,
     UPDATE_RESET_REQUEST_FORM,
@@ -330,6 +336,14 @@ export default function usersReducer(state = initialState, action: UserTypes): U
             };
         case LOGOUT_USER:
             return initialState;
+        case SET_WALLETS:
+            return {
+                ...state,
+                appUser: state.appUser ? {
+                    ...state.appUser,
+                    wallets: action.wallets
+                } : null,
+            };
         default:
             return state
     }

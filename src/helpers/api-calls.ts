@@ -3,13 +3,15 @@ import User, {
     UserLoginFormData, UserOptionsFormData,
     UserRegisterFormData, UserResetFormData, UserResetRequestFormData
 } from "../types/User";
-import axios from "axios";
-import Wallet from "../types/Wallet";
+import axios, {AxiosRequestConfig} from "axios";
+import Wallet, {WalletType} from "../types/Wallet";
 
 const apiUrl = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.trim() : null;
 
 let authenticateUserFunction, registerUserFunction, resetPasswordRequestFunction, getUserWalletsFunction,
     resetPasswordFunction, updateUserFunction;
+
+let getWalletWalletBalanceFunction;
 
 interface MockUser extends User {
     email: string
@@ -107,7 +109,34 @@ if (!apiUrl) {
         }, 500))
     };
 
+    const getRandomInt = (max: number) => {
+        return Math.floor(Math.random() * Math.floor(max));
+    };
+
+    getWalletWalletBalanceFunction = (accessToken: string, publicAddress: string, type: WalletType): Promise<string> => {
+        return new Promise((resolve, reject) => setTimeout(() => {
+            const foundUser = users.find((user: MockUser) => user.accessToken === accessToken);
+            if (!foundUser) {
+                reject("User does not exist");
+            } else {
+                const foundWallet = foundUser.wallets.find((wallet: Wallet) => wallet.publicAddress === publicAddress && wallet.walletType === type);
+                if (!foundWallet) {
+                    reject("Wallet not found");
+                } else {
+                    resolve(getRandomInt(9999999999).toString())
+                }
+            }
+        }, 500))
+    }
+
 } else {
+
+    const createConfig = (token: string): AxiosRequestConfig => {
+        return {
+            headers: {Authorization: `Bearer ${token}`}
+        }
+    };
+
     authenticateUserFunction = async (data: UserLoginFormData): Promise<AuthResponse> => {
         const response = await axios.post(apiUrl + 'api/public/authenticate', data);
         return response.data
@@ -122,10 +151,7 @@ if (!apiUrl) {
     };
 
     getUserWalletsFunction = async (accessToken: string): Promise<Array<Wallet>> => {
-        const config = {
-            headers: {Authorization: `Bearer ${accessToken}`}
-        };
-        const response = await axios.get(apiUrl + 'api/user/getWallets', config);
+        const response = await axios.get(apiUrl + 'api/user/getWallets', createConfig(accessToken));
         return response.data
     };
 
@@ -137,11 +163,14 @@ if (!apiUrl) {
     };
 
     updateUserFunction = async (accessToken: string, data: UserOptionsFormData): Promise<void> => {
-        const config = {
-            headers: {Authorization: `Bearer ${accessToken}`}
-        };
-        await axios.post(apiUrl + 'api/user/update', data, config);
+        await axios.post(apiUrl + 'api/user/update', data, createConfig(accessToken));
     };
+
+    getWalletWalletBalanceFunction = async (accessToken: string, publicAddress: string, type: WalletType): Promise<string> => {
+        const urlType = type.toString().toLowerCase();
+        const response = await axios.post(apiUrl + `api/${urlType}/getWalletBalance`, {publicAddress}, createConfig(accessToken));
+        return response.data.balance;
+    }
 }
 
 export const authenticateUser = authenticateUserFunction;
@@ -150,3 +179,4 @@ export const resetPasswordRequest = resetPasswordRequestFunction;
 export const getUserWallets = getUserWalletsFunction;
 export const resetPassword = resetPasswordFunction;
 export const updateUser = updateUserFunction;
+export const getWalletWalletBalance = getWalletWalletBalanceFunction;

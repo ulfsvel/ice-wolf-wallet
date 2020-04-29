@@ -7,7 +7,7 @@ import {
     FAIL_LOGIN_FORM, FAIL_OPTIONS_FORM,
     FAIL_REGISTER_FORM,
     FAIL_RESET_FORM, FAIL_RESET_REQUEST_FORM,
-    LOGIN_USER, LOGOUT_USER,
+    LOGIN_USER, LOGOUT_USER, SET_WALLETS,
     SUBMIT_LOGIN_FORM, SUBMIT_OPTIONS_FORM,
     SUBMIT_REGISTER_FORM,
     SUBMIT_RESET_FORM, SUBMIT_RESET_REQUEST_FORM,
@@ -18,6 +18,7 @@ import {
     UPDATE_REGISTER_FORM,
     UPDATE_RESET_FORM, UPDATE_RESET_REQUEST_FORM
 } from "../raw-actions/user";
+import Wallet from "../../types/Wallet";
 
 export function updateLoginForm(data: UserLoginFormData) {
     return {
@@ -159,5 +160,12 @@ export function loginUser(user: User) {
 export function logoutUser() {
     return {
         type: LOGOUT_USER,
+    }
+}
+
+export function setWallets(wallets: Array<Wallet>) {
+    return {
+        type: SET_WALLETS,
+        wallets
     }
 }

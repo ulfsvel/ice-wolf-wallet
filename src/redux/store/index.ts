@@ -3,9 +3,11 @@ import usersReducer from "../reducers/users";
 import thunk from "redux-thunk";
 import {createStore, applyMiddleware, compose} from 'redux';
 import appReducer from "../reducers/app";
+import walletsReducer from "../reducers/wallet";
 
 const rootReducer = combineReducers({
     user: usersReducer,
+    wallet: walletsReducer,
     app: appReducer
 });
 

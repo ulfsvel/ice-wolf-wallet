@@ -11,6 +11,14 @@ import clsx from "clsx";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import {State} from "../redux/store";
+import {connect} from "react-redux";
+import {createWalletState, WalletState} from "../redux/reducers/wallet";
+import {setWalletState} from "../redux/actions/wallet";
+import {updateWalletBalanceThunk} from "../redux/thunks/users";
+import CancelIcon from '@material-ui/icons/Cancel';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme: Theme) => ({
     card: {
@@ -59,12 +67,26 @@ const isRecoveryAvailable = (walletSecurityType: WalletSecurityType): boolean =>
 };
 
 interface WalletCardProps {
-    wallet: Wallet
+    wallet: Wallet,
+    walletStates: Record<WalletType, Record<string, WalletState>>
+    dispatch: (arg0: any) => void
 }
 
-export default ({wallet}: WalletCardProps) => {
+const WalletCard = ({wallet, walletStates, dispatch}: WalletCardProps) => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
+
+    const walletState = walletStates[wallet.walletType][wallet.publicAddress] as WalletState;
+    if (!walletState) {
+        dispatch(setWalletState(wallet.walletType, wallet.publicAddress, createWalletState()));
+        return null;
+    }
+
+    const handleCheckBalance = () => {
+        if (!walletState.getBalance.isSubmitting) {
+            dispatch(updateWalletBalanceThunk(wallet.walletType, wallet.publicAddress))
+        }
+    };
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -116,22 +138,36 @@ export default ({wallet}: WalletCardProps) => {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
             <Grid container>
                 <Grid item>
-                    <Button variant={"contained"} color={"primary"} className={classes.button}>Check balance</Button>
+                    <Button variant={"contained"} className={classes.button}
+                            onClick={handleCheckBalance}>
+                        Check balance
+                        {walletState.getBalance.isSubmitting && <CircularProgress size={24}/>}
+                        {!walletState.getBalance.isSubmitting && walletState.getBalance.wasSubmitted && walletState.getBalance.isSuccess &&
+                        <CheckCircleIcon/>}
+                        {!walletState.getBalance.isSubmitting && walletState.getBalance.wasSubmitted && !walletState.getBalance.isSuccess &&
+                        <CancelIcon/>}
+                    </Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"} color={"primary"} className={classes.button}>Transfer founds</Button>
+                    <Button variant={"contained"} className={classes.button}>Transfer founds</Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"} color={"primary"} className={classes.button}>List
+                    <Button variant={"contained"} className={classes.button}>List
                         transactions</Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"} color={"primary"} className={classes.button}>Change security</Button>
+                    <Button variant={"contained"} className={classes.button}>Change security</Button>
                 </Grid>
                 {isRecoveryAvailable(wallet.walletSecurityType) && <Grid item>
-                    <Button variant={"contained"} color={"primary"} className={classes.button}>Recover</Button>
+                    <Button variant={"contained"} className={classes.button}>Recover</Button>
                 </Grid>}
             </Grid>
         </Collapse>
     </Paper>
 };
+
+const mapStateToProps = (state: State) => ({
+    walletStates: state.wallet.states
+});
+
+export default connect(mapStateToProps)(WalletCard);
