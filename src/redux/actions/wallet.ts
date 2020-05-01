@@ -1,18 +1,24 @@
-import {RESET_WALLET, SET_WALLET_STATE} from "../raw-actions/wallet";
-import {WalletState} from "../reducers/wallet";
-import {WalletType} from "../../types/Wallet";
+import {RESET_WALLET, SET_WALLET, SET_WALLETS} from "../raw-actions/wallet";
+import Wallet, {WalletType} from "../../types/Wallet";
 
-export function setWalletState(walletType: WalletType, address: string, state: WalletState) {
+export function setWallet(walletType: WalletType, address: string, wallet: Wallet) {
     return {
-        type: SET_WALLET_STATE,
+        type: SET_WALLET,
         walletType,
         address,
-        state
+        wallet
     }
 }
 
 export function resetWallet() {
     return {
         type: RESET_WALLET,
+    }
+}
+
+export function setWallets(wallets: Record<WalletType, Record<string, Wallet>>) {
+    return {
+        type: SET_WALLETS,
+        wallets
     }
 }

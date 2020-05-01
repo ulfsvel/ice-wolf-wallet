@@ -1,8 +1,12 @@
-export default interface Wallet {
+export default interface Wallet extends StalesWallet {
+    state: WalletState
+}
+
+export interface StalesWallet {
     publicAddress: string
     walletSecurityType: WalletSecurityType,
     walletType: WalletType
-    lastKnownBalance: string
+    lastKnownBalance: string,
 }
 
 export enum WalletType {
@@ -11,4 +15,12 @@ export enum WalletType {
 
 export enum WalletSecurityType {
     ShamirBasic = "ShamirBasic", AesBasic = "AesBasic", Paper = "Paper", ShamirAdvanced = "ShamirAdvanced"
+}
+
+export interface WalletState {
+    getBalance: {
+        wasSubmitted: boolean
+        isSuccess: boolean
+        isSubmitting: boolean
+    }
 }

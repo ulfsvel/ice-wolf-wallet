@@ -1,8 +1,5 @@
-import Wallet from "./Wallet";
-
 export default interface User {
     accessToken: string
-    wallets: Array<Wallet>
 }
 
 interface FormState {

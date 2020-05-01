@@ -11,14 +11,11 @@ import clsx from "clsx";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import {State} from "../redux/store";
 import {connect} from "react-redux";
-import {createWalletState, WalletState} from "../redux/reducers/wallet";
-import {setWalletState} from "../redux/actions/wallet";
-import {updateWalletBalanceThunk} from "../redux/thunks/users";
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CircularProgress from "@material-ui/core/CircularProgress";
+import {updateWalletBalanceThunk} from "../redux/thunks/wallets";
 
 const useStyles = makeStyles((theme: Theme) => ({
     card: {
@@ -68,22 +65,15 @@ const isRecoveryAvailable = (walletSecurityType: WalletSecurityType): boolean =>
 
 interface WalletCardProps {
     wallet: Wallet,
-    walletStates: Record<WalletType, Record<string, WalletState>>
     dispatch: (arg0: any) => void
 }
 
-const WalletCard = ({wallet, walletStates, dispatch}: WalletCardProps) => {
+const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
-    const walletState = walletStates[wallet.walletType][wallet.publicAddress] as WalletState;
-    if (!walletState) {
-        dispatch(setWalletState(wallet.walletType, wallet.publicAddress, createWalletState()));
-        return null;
-    }
-
     const handleCheckBalance = () => {
-        if (!walletState.getBalance.isSubmitting) {
+        if (!wallet.state.getBalance.isSubmitting) {
             dispatch(updateWalletBalanceThunk(wallet.walletType, wallet.publicAddress))
         }
     };
@@ -141,10 +131,10 @@ const WalletCard = ({wallet, walletStates, dispatch}: WalletCardProps) => {
                     <Button variant={"contained"} className={classes.button}
                             onClick={handleCheckBalance}>
                         Check balance
-                        {walletState.getBalance.isSubmitting && <CircularProgress size={24}/>}
-                        {!walletState.getBalance.isSubmitting && walletState.getBalance.wasSubmitted && walletState.getBalance.isSuccess &&
+                        {wallet.state.getBalance.isSubmitting && <CircularProgress size={24}/>}
+                        {!wallet.state.getBalance.isSubmitting && wallet.state.getBalance.wasSubmitted && wallet.state.getBalance.isSuccess &&
                         <CheckCircleIcon/>}
-                        {!walletState.getBalance.isSubmitting && walletState.getBalance.wasSubmitted && !walletState.getBalance.isSuccess &&
+                        {!wallet.state.getBalance.isSubmitting && wallet.state.getBalance.wasSubmitted && !wallet.state.getBalance.isSuccess &&
                         <CancelIcon/>}
                     </Button>
                 </Grid>
@@ -166,8 +156,4 @@ const WalletCard = ({wallet, walletStates, dispatch}: WalletCardProps) => {
     </Paper>
 };
 
-const mapStateToProps = (state: State) => ({
-    walletStates: state.wallet.states
-});
-
-export default connect(mapStateToProps)(WalletCard);
+export default connect()(WalletCard);

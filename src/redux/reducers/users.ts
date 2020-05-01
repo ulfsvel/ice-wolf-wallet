@@ -13,7 +13,6 @@ import {
     FAIL_RESET_REQUEST_FORM,
     LOGIN_USER,
     LOGOUT_USER,
-    SET_WALLETS,
     SUBMIT_LOGIN_FORM,
     SUBMIT_OPTIONS_FORM,
     SUBMIT_REGISTER_FORM,
@@ -336,14 +335,6 @@ export default function usersReducer(state = initialState, action: UserTypes): U
             };
         case LOGOUT_USER:
             return initialState;
-        case SET_WALLETS:
-            return {
-                ...state,
-                appUser: state.appUser ? {
-                    ...state.appUser,
-                    wallets: action.wallets
-                } : null,
-            };
         default:
             return state
     }

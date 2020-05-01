@@ -3,7 +3,6 @@ import User, {
     UserRegisterFormData, UserResetFormData,
     UserResetRequestFormData
 } from "../../types/User";
-import Wallet from "../../types/Wallet";
 
 export const UPDATE_LOGIN_FORM = "UPDATE_LOGIN_FORM";
 export const SUBMIT_LOGIN_FORM = "SUBMIT_LOGIN_FORM";
@@ -33,7 +32,6 @@ export const SUCCESS_OPTIONS_FORM = "SUCCESS_OPTIONS_FORM";
 export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 
-export const SET_WALLETS = "SET_WALLETS";
 
 export interface UpdateLoginForm {
     type: typeof UPDATE_LOGIN_FORM
@@ -144,16 +142,9 @@ export interface LogoutUser {
     type: typeof LOGOUT_USER
 }
 
-export interface SetWallets {
-    type: typeof SET_WALLETS,
-    wallets: Array<Wallet>
-}
-
 export type UserTypes =
     | LoginUser
     | LogoutUser
-
-    | SetWallets
 
     | UpdateLoginForm
     | SubmitLoginForm
