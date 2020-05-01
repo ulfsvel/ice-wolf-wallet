@@ -111,4 +111,5 @@ export interface WalletState {
         state: FormState
         result: Record<string, any>
     }
+    isListingTabOpen: boolean
 }

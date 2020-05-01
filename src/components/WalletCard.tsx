@@ -18,6 +18,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {updateWalletBalanceThunk} from "../redux/thunks/wallets";
 import {Link} from "react-router-dom";
 import {getCurrencyByWalletType} from "../helpers/wallet";
+import {setWallet} from "../redux/actions/wallet";
 
 const useStyles = makeStyles((theme: Theme) => ({
     card: {
@@ -63,8 +64,6 @@ interface WalletCardProps {
 
 const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState(false);
-
     const handleCheckBalance = () => {
         if (!wallet.state.getBalanceForm.isSubmitting) {
             dispatch(updateWalletBalanceThunk(wallet.walletType, wallet.publicAddress))
@@ -72,7 +71,13 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
     };
 
     const handleExpandClick = () => {
-        setExpanded(!expanded);
+        dispatch(setWallet({
+            ...wallet,
+            state: {
+                ...wallet.state,
+                isListingTabOpen: !wallet.state.isListingTabOpen
+            }
+        }))
     };
 
     return <Paper className={classes.card} elevation={2}>
@@ -106,10 +111,10 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
                     <Grid item className={classes.balanceAndDropdown}>
                         <IconButton
                             className={clsx(classes.expand, {
-                                [classes.expandOpen]: expanded,
+                                [classes.expandOpen]: wallet.state.isListingTabOpen,
                             })}
                             onClick={handleExpandClick}
-                            aria-expanded={expanded}
+                            aria-expanded={wallet.state.isListingTabOpen}
                             aria-label="show more"
                         >
                             <ExpandMoreIcon/>
@@ -118,7 +123,7 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
                 </Grid>
             </Grid>
         </Grid>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse in={wallet.state.isListingTabOpen} timeout="auto" unmountOnExit>
             <Grid container>
                 <Grid item>
                     <Button variant={"contained"} className={classes.button}
@@ -132,14 +137,18 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"} className={classes.button} component={Link} to={`/transfer-founds/${wallet.walletType}/${wallet.publicAddress}`}>Transfer founds</Button>
+                    <Button variant={"contained"} className={classes.button} component={Link}
+                            to={`/transfer-founds/${wallet.walletType}/${wallet.publicAddress}`}>Transfer
+                        founds</Button>
                 </Grid>
                 <Grid item>
                     <Button variant={"contained"} className={classes.button}>List
                         transactions</Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"} className={classes.button} component={Link} to={`/change-security-type/${wallet.walletType}/${wallet.publicAddress}`}>Change security</Button>
+                    <Button variant={"contained"} className={classes.button} component={Link}
+                            to={`/change-security-type/${wallet.walletType}/${wallet.publicAddress}`}>Change
+                        security</Button>
                 </Grid>
                 {isRecoveryAvailable(wallet.walletSecurityType) && <Grid item>
                     <Button variant={"contained"} className={classes.button}>Recover</Button>

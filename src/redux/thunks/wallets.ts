@@ -88,7 +88,8 @@ export const createWalletState = (wallet: StalesWallet): WalletState => {
                 message: ''
             },
             result: {}
-        }
+        },
+        isListingTabOpen: false
     }
 };
 
