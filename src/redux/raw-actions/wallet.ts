@@ -6,8 +6,6 @@ export const SET_WALLETS = "SET_WALLETS";
 
 export interface SetWallet {
     type: typeof SET_WALLET,
-    walletType: WalletType
-    address: string,
     wallet: Wallet
 }
 

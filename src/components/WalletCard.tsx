@@ -2,7 +2,7 @@ import Avatar from "@material-ui/core/Avatar";
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import Button from "@material-ui/core/Button";
 import React from "react";
-import Wallet, {WalletSecurityType, WalletType} from "../types/Wallet";
+import Wallet, {WalletSecurityType} from "../types/Wallet";
 import {makeStyles, Theme} from "@material-ui/core";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
@@ -16,6 +16,8 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {updateWalletBalanceThunk} from "../redux/thunks/wallets";
+import {Link} from "react-router-dom";
+import {getCurrencyByWalletType} from "../helpers/wallet";
 
 const useStyles = makeStyles((theme: Theme) => ({
     card: {
@@ -50,15 +52,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-const getCurrencyByWalletType = (walletType: WalletType): string => {
-    switch (walletType) {
-        case WalletType.BTC:
-            return "SAT";
-        case WalletType.ETH:
-            return "WEI"
-    }
-};
-
 const isRecoveryAvailable = (walletSecurityType: WalletSecurityType): boolean => {
     return walletSecurityType === WalletSecurityType.ShamirBasic;
 };
@@ -73,7 +66,7 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
     const [expanded, setExpanded] = React.useState(false);
 
     const handleCheckBalance = () => {
-        if (!wallet.state.getBalance.isSubmitting) {
+        if (!wallet.state.getBalanceForm.isSubmitting) {
             dispatch(updateWalletBalanceThunk(wallet.walletType, wallet.publicAddress))
         }
     };
@@ -131,15 +124,15 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
                     <Button variant={"contained"} className={classes.button}
                             onClick={handleCheckBalance}>
                         Check balance
-                        {wallet.state.getBalance.isSubmitting && <CircularProgress size={24}/>}
-                        {!wallet.state.getBalance.isSubmitting && wallet.state.getBalance.wasSubmitted && wallet.state.getBalance.isSuccess &&
+                        {wallet.state.getBalanceForm.isSubmitting && <CircularProgress size={24}/>}
+                        {!wallet.state.getBalanceForm.isSubmitting && wallet.state.getBalanceForm.wasSubmitted && wallet.state.getBalanceForm.isSuccess &&
                         <CheckCircleIcon/>}
-                        {!wallet.state.getBalance.isSubmitting && wallet.state.getBalance.wasSubmitted && !wallet.state.getBalance.isSuccess &&
+                        {!wallet.state.getBalanceForm.isSubmitting && wallet.state.getBalanceForm.wasSubmitted && !wallet.state.getBalanceForm.isSuccess &&
                         <CancelIcon/>}
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"} className={classes.button}>Transfer founds</Button>
+                    <Button variant={"contained"} className={classes.button} component={Link} to={`/transfer-founds/${wallet.walletType}/${wallet.publicAddress}`}>Transfer founds</Button>
                 </Grid>
                 <Grid item>
                     <Button variant={"contained"} className={classes.button}>List

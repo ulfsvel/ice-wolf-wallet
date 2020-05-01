@@ -1,11 +1,7 @@
+import {FormState} from "./misc";
+
 export default interface User {
     accessToken: string
-}
-
-interface FormState {
-    isSubmitting: boolean
-    isSuccess: boolean
-    message: string
 }
 
 export interface UserResetFormData {

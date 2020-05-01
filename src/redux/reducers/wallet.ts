@@ -2,15 +2,6 @@ import {RESET_WALLET, SET_WALLET, SET_WALLETS, WalletTypes} from "../raw-actions
 import Wallet, {WalletType} from "../../types/Wallet";
 
 
-export interface WalletState {
-    getBalance: {
-        wasSubmitted: boolean
-        isSuccess: boolean
-        isSubmitting: boolean
-    }
-}
-
-
 export interface WalletsState {
     wallets: Record<WalletType, Record<string, Wallet>>
 }
@@ -29,9 +20,9 @@ export default function walletsReducer(state = initialState, action: WalletTypes
                 ...state,
                 wallets: {
                     ...state.wallets,
-                    [action.walletType]: {
-                        ...state.wallets[action.walletType],
-                        [action.address]: action.wallet
+                    [action.wallet.walletType]: {
+                        ...state.wallets[action.wallet.walletType],
+                        [action.wallet.publicAddress]: action.wallet
                     }
                 }
             };

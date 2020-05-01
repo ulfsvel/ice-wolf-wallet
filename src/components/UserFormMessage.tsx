@@ -5,8 +5,9 @@ import {green} from "@material-ui/core/colors";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import clsx from "clsx";
+import {Theme} from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
     success: {
         backgroundColor: green[600],
     },

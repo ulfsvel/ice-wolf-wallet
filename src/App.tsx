@@ -5,7 +5,7 @@ import {
     Route
 } from "react-router-dom";
 import ThemeWrapper from "./components/ThemeWrapper";
-import UserPagesWrapper from "./components/UserPagesWrapper";
+import CenterOnPageWrapper from "./components/UserPagesWrapper";
 import Auth from "./components/pages/Auth";
 import PrivateRoute from "./components/PrivateRoute";
 import Wrapper from "./components/Wrapper";
@@ -16,6 +16,7 @@ import {initAppThunk} from "./redux/thunks/app";
 import {AppState} from "./redux/reducers/app";
 import {State} from "./redux/store";
 import LoadingAnimation from "./components/LoadingAnimation";
+import TransferFounds from "./components/pages/TransferFounds";
 
 interface AppProps {
     app: AppState
@@ -37,15 +38,20 @@ const App = ({app, dispatch}: AppProps) => {
         <BrowserRouter>
             <Switch>
                 <Route exact path="/auth/reset/:resetToken">
-                    <UserPagesWrapper>
+                    <CenterOnPageWrapper>
                         <PasswordReset/>
-                    </UserPagesWrapper>
+                    </CenterOnPageWrapper>
                 </Route>
                 <Route exact path="/auth">
-                    <UserPagesWrapper>
+                    <CenterOnPageWrapper>
                         <Auth/>
-                    </UserPagesWrapper>
+                    </CenterOnPageWrapper>
                 </Route>
+                <PrivateRoute exact path="/transfer-founds/:walletTypeString/:publicAddress">
+                    <CenterOnPageWrapper>
+                        <TransferFounds/>
+                    </CenterOnPageWrapper>
+                </PrivateRoute>
                 <PrivateRoute exact path="/">
                     <Wrapper>
                         <Dashboard/>

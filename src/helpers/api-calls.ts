@@ -48,3 +48,22 @@ export const getWalletWalletBalance = async (accessToken: string, publicAddress:
     const response = await axios.post(apiUrl + `api/${urlType}/getWalletBalance`, {publicAddress}, createConfig(accessToken));
     return response.data.balance;
 };
+
+export const transferFounds = async (accessToken: string, wallet: Wallet): Promise<string> => {
+    const data = {
+        credentials: {} as Record<string, any>,
+        publicAddress: wallet.publicAddress,
+        to: wallet.state.sendFoundsForm.data.to,
+        amount: wallet.state.sendFoundsForm.data.amount
+    };
+    for (const field in wallet.state.sendFoundsForm.data) {
+        if (!(['to', 'amount'].includes(field))) {
+            // @ts-ignore
+            data.credentials[field] = wallet.state.sendFoundsForm.data[field];
+        }
+    }
+
+    const urlType = wallet.walletType.toString().toLowerCase();
+    const response = await axios.post(apiUrl + `api/${urlType}/transferFounds`, data, createConfig(accessToken));
+    return response.data.balance;
+};

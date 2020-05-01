@@ -1,11 +1,9 @@
 import {RESET_WALLET, SET_WALLET, SET_WALLETS} from "../raw-actions/wallet";
 import Wallet, {WalletType} from "../../types/Wallet";
 
-export function setWallet(walletType: WalletType, address: string, wallet: Wallet) {
+export function setWallet(wallet: Wallet) {
     return {
         type: SET_WALLET,
-        walletType,
-        address,
         wallet
     }
 }
