@@ -5,13 +5,17 @@ import {connect} from "react-redux";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
-import Wallet, {PaperTransferFoundsForm} from "../../../../types/Wallet";
+import Wallet, {AesBasicTransferForm, WalletSecurityType} from "../../../../types/Wallet";
 import {setWallet} from "../../../../redux/actions/wallet";
 import UserFormMessage from "../../../UserFormMessage";
 import {State} from "../../../../redux/store";
 import Typography from "@material-ui/core/Typography";
 import {getCurrencyByWalletType} from "../../../../helpers/wallet";
 import {transferFoundsThunk} from "../../../../redux/thunks/wallets";
+import AesBasicSendFoundsForm from "./AesBasicSendFoundsForm";
+import ShamirAdvancedSendFoundsForm from "./ShamirAdvancedSendFoundsForm";
+import ShamirBasicSentFoundsForm from "./ShamirBasicSentFoundsForm";
+import PaperSendFoundsForm from "./PaperSendFoundsForm";
 
 const useStyles = makeStyles((theme: Theme) => ({
     input: {
@@ -20,17 +24,29 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
+const getForm = (wallet: Wallet) => {
+    switch (wallet.walletSecurityType) {
+        case WalletSecurityType.Paper:
+            return <PaperSendFoundsForm wallet={wallet}/>;
+        case WalletSecurityType.ShamirBasic:
+            return <ShamirBasicSentFoundsForm wallet={wallet}/>;
+        case WalletSecurityType.AesBasic:
+            return <AesBasicSendFoundsForm wallet={wallet}/>;
+        case WalletSecurityType.ShamirAdvanced:
+            return <ShamirAdvancedSendFoundsForm wallet={wallet}/>;
+    }
+};
 
-interface PaperFormProps {
+interface AesBasicDecryptFormProps {
     wallet: Wallet
     dispatch: (arg0: any) => void,
 }
 
-const PaperForm = ({wallet, dispatch}: PaperFormProps) => {
+const SendFoundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) => {
     const classes = useStyles();
-    const form = wallet.state.sendFoundsForm as unknown as PaperTransferFoundsForm;
+    const form = wallet.state.sendFoundsForm as unknown as AesBasicTransferForm;
 
-    const updateWalletDecryptForm = (key: "privateKey" | 'to' | 'amount') => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const updateWalletDecryptForm = (key: 'to' | 'amount') => (event: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(setWallet({
             ...wallet,
             state: {
@@ -80,15 +96,7 @@ const PaperForm = ({wallet, dispatch}: PaperFormProps) => {
         <Typography>
             Security
         </Typography>
-        <TextField
-            disabled={wallet.state.sendFoundsForm.state.isSubmitting}
-            className={classes.input}
-            label={"Private Key"}
-            fullWidth
-            variant={"outlined"}
-            value={form.privateKey}
-            onChange={updateWalletDecryptForm('privateKey')}
-        />
+        {getForm(wallet)}
         <Button
             fullWidth
             disabled={wallet.state.sendFoundsForm.state.isSubmitting}
@@ -107,4 +115,4 @@ const mapStateToProps = (state: State) => ({
     loginForm: state.user.loginForm
 });
 
-export default connect(mapStateToProps)(PaperForm);
+export default connect(mapStateToProps)(SendFoundsForm);

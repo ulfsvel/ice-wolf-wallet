@@ -3,39 +3,61 @@ import Wallet, {
     StalesWallet,
     WalletSecurityType,
     WalletState,
-    WalletType
+    WalletType, WalletEncryptCredentials, WalletDecryptCredentials
 } from "../../types/Wallet";
 import {State} from "../store";
 import {setWallet} from "../actions/wallet";
-import {getWalletWalletBalance, transferFounds} from "../../helpers/api-calls";
+import {changeSecurityType, getWalletWalletBalance, transferFounds} from "../../helpers/api-calls";
 
-const getDecryptFormDataByType = (type: WalletSecurityType): TransferFoundsFormData => {
+const getDecryptFormDataByType = (type: WalletSecurityType): WalletDecryptCredentials => {
     switch (type) {
         case WalletSecurityType.AesBasic:
             return {
-                to: '',
-                amount: '',
                 password: ''
             };
         case WalletSecurityType.ShamirBasic:
             return {
-                to: '',
-                amount: '',
                 password: ''
             };
         case WalletSecurityType.ShamirAdvanced:
             return {
-                to: '',
-                amount: '',
+
                 shares: []
             };
         default:
         case WalletSecurityType.Paper:
             return {
-                to: '',
-                amount: '',
                 privateKey: ''
             };
+    }
+};
+
+const getTransferFoundsFormDataByType = (type: WalletSecurityType): TransferFoundsFormData => {
+    return {
+        ...getDecryptFormDataByType(type),
+        to: '',
+        amount: ''
+    }
+};
+
+export const getEncryptFormDataByType = (type: WalletSecurityType): WalletEncryptCredentials => {
+    switch (type) {
+        case WalletSecurityType.AesBasic:
+            return {
+                password: ''
+            };
+        case WalletSecurityType.ShamirBasic:
+            return {
+                password: ''
+            };
+        case WalletSecurityType.ShamirAdvanced:
+            return {
+                totalShares: 3,
+                sharesToRebuild: 1
+            };
+        default:
+        case WalletSecurityType.Paper:
+            return {};
     }
 };
 
@@ -47,12 +69,25 @@ export const createWalletState = (wallet: StalesWallet): WalletState => {
             isSubmitting: false
         },
         sendFoundsForm: {
-            data: getDecryptFormDataByType(wallet.walletSecurityType),
+            data: getTransferFoundsFormDataByType(wallet.walletSecurityType),
             state: {
                 isSubmitting: false,
                 isSuccess: false,
                 message: ''
             }
+        },
+        changeSecurityType: {
+            data: {
+                currentCredentials: getDecryptFormDataByType(wallet.walletSecurityType),
+                newCredentials: getEncryptFormDataByType(WalletSecurityType.Paper),
+                newSecurityType: WalletSecurityType.Paper
+            },
+            state: {
+                isSubmitting: false,
+                isSuccess: false,
+                message: ''
+            },
+            result: {}
         }
     }
 };
@@ -150,7 +185,7 @@ export const transferFoundsThunk = (wallet: Wallet) => (dispatch: (arg0: any) =>
             state: {
                 ...wallet.state,
                 sendFoundsForm: {
-                    data: getDecryptFormDataByType(wallet.walletSecurityType),
+                    data: getTransferFoundsFormDataByType(wallet.walletSecurityType),
                     state: {
                         isSubmitting: false,
                         isSuccess: true,
@@ -170,6 +205,67 @@ export const transferFoundsThunk = (wallet: Wallet) => (dispatch: (arg0: any) =>
                 ...wallet.state,
                 sendFoundsForm: {
                     ...wallet.state.sendFoundsForm,
+                    state: {
+                        isSubmitting: false,
+                        isSuccess: false,
+                        message: 'Operation failed',
+                    }
+                }
+            }
+        }));
+    });
+};
+
+export const changeSecurityTypeThunk = (wallet: Wallet) => (dispatch: (arg0: any) => void, getState: () => State) => {
+
+    const user = getState().user.appUser;
+    if (user === null) {
+        return;
+    }
+
+    dispatch(setWallet({
+        ...wallet,
+        state: {
+            ...wallet.state,
+            changeSecurityType: {
+                ...wallet.state.changeSecurityType,
+                state: {
+                    isSubmitting: true,
+                    isSuccess: true,
+                    message: '',
+                }
+            }
+        }
+    }));
+    changeSecurityType(user.accessToken, wallet).then(() => {
+        dispatch(setWallet({
+            ...wallet,
+            walletSecurityType: wallet.state.changeSecurityType.data.newSecurityType,
+            state: {
+                ...wallet.state,
+                changeSecurityType: {
+                    ...wallet.state.changeSecurityType,
+                    data: {
+                        currentCredentials: getDecryptFormDataByType(wallet.state.changeSecurityType.data.newSecurityType),
+                        newCredentials: getEncryptFormDataByType(WalletSecurityType.Paper),
+                        newSecurityType: WalletSecurityType.Paper
+                    },
+                    result: {},
+                    state: {
+                        isSubmitting: false,
+                        isSuccess: true,
+                        message: 'Operation successful',
+                    }
+                }
+            }
+        }));
+    }).catch(() => {
+        dispatch(setWallet({
+            ...wallet,
+            state: {
+                ...wallet.state,
+                changeSecurityType: {
+                    ...wallet.state.changeSecurityType,
                     state: {
                         isSubmitting: false,
                         isSuccess: false,

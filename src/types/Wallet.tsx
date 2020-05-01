@@ -24,35 +24,41 @@ export interface TransferFounds {
     amount: string
 }
 
-export interface ShamirBasic {
+export interface ShamirBasicDecrypt {
     password: string
 }
 
-export interface AesBasic {
+export interface AesBasicDecrypt {
     password: string
 }
 
-export interface ShamirAdvanced {
+export interface ShamirAdvancedDecrypt {
     shares: Array<string>
 }
 
-export interface Paper {
+export interface PaperDecrypt {
     privateKey: string
 }
 
-export interface PaperTransferFoundsForm extends TransferFounds, Paper {
+export type WalletDecryptCredentials =
+    | ShamirBasicDecrypt
+    | AesBasicDecrypt
+    | ShamirAdvancedDecrypt
+    | PaperDecrypt
+
+export interface PaperTransferFoundsForm extends TransferFounds, PaperDecrypt {
 
 }
 
-export interface ShamirBasicTransferForm extends TransferFounds, ShamirBasic {
+export interface ShamirBasicTransferForm extends TransferFounds, ShamirBasicDecrypt {
 
 }
 
-export interface AesBasicTransferForm extends TransferFounds, AesBasic {
+export interface AesBasicTransferForm extends TransferFounds, AesBasicDecrypt {
 
 }
 
-export interface ShamirAdvancedTransferForm extends TransferFounds, ShamirAdvanced {
+export interface ShamirAdvancedTransferForm extends TransferFounds, ShamirAdvancedDecrypt {
 
 }
 
@@ -61,6 +67,30 @@ export type TransferFoundsFormData =
     | ShamirBasicTransferForm
     | AesBasicTransferForm
     | ShamirAdvancedTransferForm
+
+
+export interface ShamirBasicEncrypt {
+    password: string
+}
+
+export interface AesBasicEncrypt {
+    password: string
+}
+
+export interface ShamirAdvancedEncrypt {
+    totalShares: number
+    sharesToRebuild: number
+
+}
+
+export interface PaperEncrypt {
+}
+
+export type WalletEncryptCredentials =
+    | ShamirBasicEncrypt
+    | AesBasicEncrypt
+    | ShamirAdvancedEncrypt
+    | PaperEncrypt
 
 export interface WalletState {
     getBalanceForm: {
@@ -71,5 +101,14 @@ export interface WalletState {
     sendFoundsForm: {
         data: TransferFoundsFormData
         state: FormState
+    }
+    changeSecurityType: {
+        data: {
+            currentCredentials: WalletDecryptCredentials
+            newCredentials: WalletEncryptCredentials
+            newSecurityType: WalletSecurityType
+        }
+        state: FormState
+        result: Record<string, any>
     }
 }

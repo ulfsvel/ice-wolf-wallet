@@ -67,3 +67,15 @@ export const transferFounds = async (accessToken: string, wallet: Wallet): Promi
     const response = await axios.post(apiUrl + `api/${urlType}/transferFounds`, data, createConfig(accessToken));
     return response.data.balance;
 };
+
+export const changeSecurityType = async (accessToken: string, wallet: Wallet): Promise<void> => {
+    const data = {
+        publicAddress: wallet.publicAddress,
+        currentCredentials: wallet.state.changeSecurityType.data.currentCredentials,
+        newCredentials: wallet.state.changeSecurityType.data.newCredentials,
+        newSecurityType: wallet.state.changeSecurityType.data.newSecurityType
+    };
+
+    const urlType = wallet.walletType.toString().toLowerCase();
+    await axios.post(apiUrl + `api/${urlType}/updateWalletSecurity`, data, createConfig(accessToken));
+};

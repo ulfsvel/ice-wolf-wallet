@@ -139,7 +139,7 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
                         transactions</Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"} className={classes.button}>Change security</Button>
+                    <Button variant={"contained"} className={classes.button} component={Link} to={`/change-security-type/${wallet.walletType}/${wallet.publicAddress}`}>Change security</Button>
                 </Grid>
                 {isRecoveryAvailable(wallet.walletSecurityType) && <Grid item>
                     <Button variant={"contained"} className={classes.button}>Recover</Button>

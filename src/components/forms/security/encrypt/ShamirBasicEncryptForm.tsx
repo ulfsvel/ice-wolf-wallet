@@ -1,7 +1,7 @@
 import TextField from "@material-ui/core/TextField";
 import React from "react";
 import {makeStyles, Theme} from "@material-ui/core";
-import Wallet, {ShamirBasicDecrypt} from "../../../../types/Wallet";
+import Wallet, {ShamirBasicEncrypt} from "../../../../types/Wallet";
 
 const useStyles = makeStyles((theme: Theme) => ({
     input: {
@@ -13,12 +13,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface ShamirBasicDecryptFormProps {
     wallet: Wallet
-    updateWalletDecryptForm: (arg0: 'password') => (event: React.ChangeEvent<HTMLInputElement>) => void
+    updateWalletEncryptForm: (arg0: 'password') => (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const ShamirBasicDecryptForm = ({wallet, updateWalletDecryptForm}: ShamirBasicDecryptFormProps) => {
+const ShamirBasicEncryptForm = ({wallet, updateWalletEncryptForm}: ShamirBasicDecryptFormProps) => {
     const classes = useStyles();
-    const form = wallet.state.changeSecurityType.data.currentCredentials as unknown as ShamirBasicDecrypt;
+    const form = wallet.state.changeSecurityType.data.newCredentials as unknown as ShamirBasicEncrypt;
 
     return <TextField
         disabled={wallet.state.changeSecurityType.state.isSubmitting}
@@ -27,8 +27,8 @@ const ShamirBasicDecryptForm = ({wallet, updateWalletDecryptForm}: ShamirBasicDe
         fullWidth
         variant={"outlined"}
         value={form.password}
-        onChange={updateWalletDecryptForm('password')}
+        onChange={updateWalletEncryptForm('password')}
     />
 };
 
-export default ShamirBasicDecryptForm;
+export default ShamirBasicEncryptForm;

@@ -28,8 +28,7 @@ import {clearStorage, setAccessToken} from "../../helpers/local-storage";
 import {resetApp} from "../actions/app";
 import {State} from "../store";
 import {resetWallet, setWallets} from "../actions/wallet";
-import Wallet, {StalesWallet} from "../../types/Wallet";
-import {createWalletState, fromStatelessWalletArrayToState} from "./wallets";
+import {fromStatelessWalletArrayToState} from "./wallets";
 
 export const loginUserThunk = (userLoginFormData: UserLoginFormData) => (dispatch: (arg0: any) => void) => {
     dispatch(submitLoginForm());
