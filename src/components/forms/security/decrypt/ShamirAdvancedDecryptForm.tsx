@@ -4,9 +4,16 @@ import {makeStyles, Theme} from "@material-ui/core";
 import {connect} from "react-redux";
 import Wallet, {ShamirAdvancedDecrypt} from "../../../../types/Wallet";
 import Button from "@material-ui/core/Button";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Box from "@material-ui/core/Box";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme: Theme) => ({
+    box: {
+        width: "100%"
+    },
+    boxButton: {
+        marginRight: theme.spacing(2)
+    },
     input: {
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2)
@@ -27,26 +34,27 @@ const ShamirAdvancedDecryptForm = ({wallet, updateWalletDecryptFormShares, addWa
     const form = wallet.state.changeSecurityType.data.currentCredentials as unknown as ShamirAdvancedDecrypt;
 
     return <React.Fragment>
-        <Button
-            disabled={wallet.state.sendFoundsForm.state.isSubmitting}
-            className={classes.input}
-            variant="contained"
-            component="label"
-            color={"primary"}
-            onClick={removeWalletDecryptFormShare}
-        >
-            {wallet.state.sendFoundsForm.state.isSubmitting ? <CircularProgress size={24}/> : "Remove Share"}
-        </Button>
-        <Button
-            disabled={wallet.state.sendFoundsForm.state.isSubmitting}
-            className={classes.input}
-            variant="contained"
-            component="label"
-            color={"primary"}
-            onClick={addWalletDecryptFormShare}
-        >
-            {wallet.state.sendFoundsForm.state.isSubmitting ? <CircularProgress size={24}/> : "Add Share"}
-        </Button>
+        <Box className={clsx(classes.box, classes.input)}>
+            <Button
+                disabled={wallet.state.sendFoundsForm.state.isSubmitting}
+                className={classes.boxButton}
+                variant="contained"
+                component="label"
+                color={"primary"}
+                onClick={removeWalletDecryptFormShare}
+            >
+                Remove Share
+            </Button>
+            <Button
+                disabled={wallet.state.sendFoundsForm.state.isSubmitting}
+                variant="contained"
+                component="label"
+                color={"primary"}
+                onClick={addWalletDecryptFormShare}
+            >
+                Add Share
+            </Button>
+        </Box>
         {form.shares.map((share: string, key: number) => (
             <TextField
                 key={key}

@@ -22,7 +22,7 @@ const ShamirAdvancedChangeSecurityTypeEncryptForm = ({wallet, dispatch}: ShamirA
                         ...wallet.state.changeSecurityType.data,
                         newCredentials: {
                             ...wallet.state.changeSecurityType.data.newCredentials,
-                            [key]: event.target.value
+                            [key]: parseInt(event.target.value)
                         }
                     }
                 }

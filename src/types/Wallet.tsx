@@ -80,7 +80,6 @@ export interface AesBasicEncrypt {
 export interface ShamirAdvancedEncrypt {
     totalShares: number
     sharesToRebuild: number
-
 }
 
 export interface PaperEncrypt {
@@ -91,6 +90,22 @@ export type WalletEncryptCredentials =
     | AesBasicEncrypt
     | ShamirAdvancedEncrypt
     | PaperEncrypt
+
+
+export interface PaperSecurityResult {
+    privateKey: string
+}
+
+export interface ShamirAdvancedSecurityResult {
+    totalShares: number
+    sharesToRebuild: number
+    shares: Array<string>
+}
+
+export type WalletSecurityTypeResult =
+    | PaperSecurityResult
+    | ShamirAdvancedSecurityResult
+    | null
 
 export interface WalletState {
     getBalanceForm: {
@@ -109,7 +124,7 @@ export interface WalletState {
             newSecurityType: WalletSecurityType
         }
         state: FormState
-        result: Record<string, any>
+        result: WalletSecurityTypeResult
     }
     isListingTabOpen: boolean
 }

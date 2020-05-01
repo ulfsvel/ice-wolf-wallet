@@ -24,7 +24,9 @@ const useStyles = makeStyles((theme: Theme) => ({
         alignItems: 'center',
     },
     snackbar: {
-        width: "100%"
+        width: "100%",
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2)
     }
 }));
 

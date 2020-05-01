@@ -4,7 +4,7 @@ import {
     UserRegisterFormData, UserResetFormData, UserResetRequestFormData
 } from "../types/User";
 import axios, {AxiosRequestConfig} from "axios";
-import Wallet, {StalesWallet, WalletType} from "../types/Wallet";
+import Wallet, {StalesWallet, WalletSecurityTypeResult, WalletType} from "../types/Wallet";
 
 const apiUrl = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.trim() : 'http://localhost/';
 
@@ -68,7 +68,7 @@ export const transferFounds = async (accessToken: string, wallet: Wallet): Promi
     return response.data.balance;
 };
 
-export const changeSecurityType = async (accessToken: string, wallet: Wallet): Promise<void> => {
+export const changeSecurityType = async (accessToken: string, wallet: Wallet): Promise<WalletSecurityTypeResult> => {
     const data = {
         publicAddress: wallet.publicAddress,
         currentCredentials: wallet.state.changeSecurityType.data.currentCredentials,
@@ -77,5 +77,6 @@ export const changeSecurityType = async (accessToken: string, wallet: Wallet): P
     };
 
     const urlType = wallet.walletType.toString().toLowerCase();
-    await axios.post(apiUrl + `api/${urlType}/updateWalletSecurity`, data, createConfig(accessToken));
+    const response = await axios.post(apiUrl + `api/${urlType}/updateWalletSecurity`, data, createConfig(accessToken));
+    return response.data.auxiliaryData
 };

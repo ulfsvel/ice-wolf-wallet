@@ -19,6 +19,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {setWallet} from "../../../../redux/actions/wallet";
 import TextField from "@material-ui/core/TextField";
 import {getWalletSecurityType} from "../../../../helpers/wallet";
+import PaperResult from "../result/PaperResult";
+import ShamirAdvancedResult from "../result/ShamirAdvancedResult";
 
 const useStyles = makeStyles((theme: Theme) => ({
     input: {
@@ -50,6 +52,17 @@ const getEncryptForm = (wallet: Wallet) => {
             return <AesBasicChangeSecurityTypeEncryptForm wallet={wallet}/>;
         case WalletSecurityType.ShamirAdvanced:
             return <ShamirAdvancedChangeSecurityTypeEncryptForm wallet={wallet}/>;
+    }
+};
+
+const getResult = (wallet: Wallet) => {
+    switch (wallet.walletSecurityType) {
+        case WalletSecurityType.Paper:
+            return <PaperResult wallet={wallet}/>;
+        case WalletSecurityType.ShamirAdvanced:
+            return <ShamirAdvancedResult wallet={wallet}/>;
+        default:
+            return null;
     }
 };
 
@@ -120,6 +133,7 @@ const ChangeSecurityTypeForm = ({wallet, dispatch}: ChangeSecurityTypeFormProps)
         >
             {wallet.state.changeSecurityType.state.isSubmitting ? <CircularProgress size={24}/> : "Send"}
         </Button>
+        {getResult(wallet)}
     </Grid>
 };
 

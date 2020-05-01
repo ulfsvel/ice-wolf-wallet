@@ -24,6 +24,7 @@ const ShamirAdvancedEncryptForm = ({wallet, updateWalletEncryptForm}: ShamirAdva
 
     return <React.Fragment>
         <TextField
+            type={"number"}
             disabled={wallet.state.changeSecurityType.state.isSubmitting}
             className={classes.input}
             label={"Total share"}
@@ -33,6 +34,7 @@ const ShamirAdvancedEncryptForm = ({wallet, updateWalletEncryptForm}: ShamirAdva
             onChange={updateWalletEncryptForm('totalShares')}
         />
         <TextField
+            type={"number"}
             disabled={wallet.state.changeSecurityType.state.isSubmitting}
             className={classes.input}
             label={"Shares to rebuild"}

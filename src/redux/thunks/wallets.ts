@@ -1,9 +1,12 @@
 import Wallet, {
-    TransferFoundsFormData,
     StalesWallet,
+    TransferFoundsFormData,
+    WalletDecryptCredentials,
+    WalletEncryptCredentials,
     WalletSecurityType,
+    WalletSecurityTypeResult,
     WalletState,
-    WalletType, WalletEncryptCredentials, WalletDecryptCredentials
+    WalletType
 } from "../../types/Wallet";
 import {State} from "../store";
 import {setWallet} from "../actions/wallet";
@@ -87,7 +90,7 @@ export const createWalletState = (wallet: StalesWallet): WalletState => {
                 isSuccess: false,
                 message: ''
             },
-            result: {}
+            result: null
         },
         isListingTabOpen: false
     }
@@ -238,7 +241,7 @@ export const changeSecurityTypeThunk = (wallet: Wallet) => (dispatch: (arg0: any
             }
         }
     }));
-    changeSecurityType(user.accessToken, wallet).then(() => {
+    changeSecurityType(user.accessToken, wallet).then((result: WalletSecurityTypeResult) => {
         dispatch(setWallet({
             ...wallet,
             walletSecurityType: wallet.state.changeSecurityType.data.newSecurityType,
@@ -251,7 +254,7 @@ export const changeSecurityTypeThunk = (wallet: Wallet) => (dispatch: (arg0: any
                         newCredentials: getEncryptFormDataByType(WalletSecurityType.Paper),
                         newSecurityType: WalletSecurityType.Paper
                     },
-                    result: {},
+                    result: [WalletSecurityType.Paper, WalletSecurityType.ShamirAdvanced].includes(wallet.state.changeSecurityType.data.newSecurityType) ? result : null,
                     state: {
                         isSubmitting: false,
                         isSuccess: true,

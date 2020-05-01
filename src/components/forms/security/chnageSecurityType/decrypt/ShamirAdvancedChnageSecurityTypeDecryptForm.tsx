@@ -55,7 +55,7 @@ const ShamirAdvancedChangeSecurityTypeDecryptForm = ({wallet, dispatch}: ShamirA
 
     const removeWalletDecryptFormShare = () => {
         if (form.shares.length > 1) {
-            const shares = form.shares.slice(0, form.shares.length - 2);
+            const shares = form.shares.slice(0, form.shares.length - 1);
             dispatch(setWallet({
                 ...wallet,
                 state: {

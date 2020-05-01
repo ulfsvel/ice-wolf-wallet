@@ -1,6 +1,6 @@
 import TextField from "@material-ui/core/TextField";
 import React from "react";
-import {makeStyles} from "@material-ui/core";
+import {makeStyles, Theme} from "@material-ui/core";
 import {UserLoginForm} from "../../types/User";
 import {State} from "../../redux/store"
 import {connect} from "react-redux";
@@ -11,8 +11,7 @@ import {loginUserThunk} from "../../redux/thunks/users";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 
-// noinspection TypeScriptValidateJSTypes
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
     input: {
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2)
