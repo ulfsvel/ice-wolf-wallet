@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import Wallet from "../../../../types/Wallet";
+import Wallet, {AesBasicDecrypt} from "../../../../types/Wallet";
 import {setWallet} from "../../../../redux/actions/wallet";
 import AesBasicDecryptForm from "../decrypt/AesBasicDecryptForm";
 
@@ -26,7 +26,9 @@ const AesBasicSendFoundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) =>
         }))
     };
 
-    return <AesBasicDecryptForm wallet={wallet} updateWalletDecryptForm={updateWalletDecryptForm}/>
+    return <AesBasicDecryptForm state={wallet.state.sendFoundsForm.state}
+                                data={wallet.state.sendFoundsForm.data as any as AesBasicDecrypt}
+                                updateWalletDecryptForm={updateWalletDecryptForm}/>
 };
 
 export default connect()(AesBasicSendFoundsForm);

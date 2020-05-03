@@ -2,7 +2,8 @@ import TextField from "@material-ui/core/TextField";
 import React from "react";
 import {makeStyles, Theme} from "@material-ui/core";
 import {connect} from "react-redux";
-import Wallet, {ShamirAdvancedEncrypt} from "../../../../types/Wallet";
+import {ShamirAdvancedEncrypt} from "../../../../types/Wallet";
+import {FormState} from "../../../../types/misc";
 
 const useStyles = makeStyles((theme: Theme) => ({
     input: {
@@ -13,34 +14,34 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 
 interface ShamirAdvancedEncryptFormProps {
-    wallet: Wallet
+    state: FormState
+    data: ShamirAdvancedEncrypt
     updateWalletEncryptForm: (arg0: 'totalShares' | 'sharesToRebuild') => (event: React.ChangeEvent<HTMLInputElement>) => void
     dispatch: (arg0: any) => void,
 }
 
-const ShamirAdvancedEncryptForm = ({wallet, updateWalletEncryptForm}: ShamirAdvancedEncryptFormProps) => {
+const ShamirAdvancedEncryptForm = ({state, data, updateWalletEncryptForm}: ShamirAdvancedEncryptFormProps) => {
     const classes = useStyles();
-    const form = wallet.state.changeSecurityType.data.newCredentials as unknown as ShamirAdvancedEncrypt;
 
     return <React.Fragment>
         <TextField
             type={"number"}
-            disabled={wallet.state.changeSecurityType.state.isSubmitting}
+            disabled={state.isSubmitting}
             className={classes.input}
             label={"Total share"}
             fullWidth
             variant={"outlined"}
-            value={form.totalShares}
+            value={data.totalShares}
             onChange={updateWalletEncryptForm('totalShares')}
         />
         <TextField
             type={"number"}
-            disabled={wallet.state.changeSecurityType.state.isSubmitting}
+            disabled={state.isSubmitting}
             className={classes.input}
             label={"Shares to rebuild"}
             fullWidth
             variant={"outlined"}
-            value={form.sharesToRebuild}
+            value={data.sharesToRebuild}
             onChange={updateWalletEncryptForm('sharesToRebuild')}
         />
     </React.Fragment>

@@ -1,16 +1,25 @@
-import {AppTypes, RESET_APP, SET_AUTH_TAB, SET_IS_INITIALISED, SET_WALLET_TAB} from "../raw-actions/app";
+import {
+    AppTypes,
+    RESET_APP,
+    SET_AUTH_TAB,
+    SET_IS_INITIALISED,
+    SET_OPTIONS_TAB,
+    SET_WALLET_TAB
+} from "../raw-actions/app";
 
 
 export interface AppState {
     isInitialised: boolean
     walletTab: number
-    authTab: number
+    authTab: number,
+    optionsTab: number
 }
 
 const initialState: AppState = {
     isInitialised: false,
     walletTab: 0,
-    authTab: 0
+    authTab: 0,
+    optionsTab: 0
 };
 
 export default function appReducer(state = initialState, action: AppTypes): AppState {
@@ -29,6 +38,11 @@ export default function appReducer(state = initialState, action: AppTypes): AppS
             return {
                 ...state,
                 authTab: action.tab
+            };
+        case SET_OPTIONS_TAB:
+            return {
+                ...state,
+                optionsTab: action.tab
             };
         case RESET_APP:
             return initialState;

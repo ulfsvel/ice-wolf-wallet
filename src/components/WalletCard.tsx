@@ -17,7 +17,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {updateWalletBalanceThunk} from "../redux/thunks/wallets";
 import {Link} from "react-router-dom";
-import {getCurrencyByWalletType} from "../helpers/wallet";
+import {getCurrencyByWalletType, getTransactionListUrl} from "../helpers/wallet";
 import {setWallet} from "../redux/actions/wallet";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -50,6 +50,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     button: {
         margin: theme.spacing(1)
+    },
+    scroll: {
+        overflowX: 'auto'
+    },
+    fixWidth: {
+        maxWidth: '100%'
     }
 }));
 
@@ -80,10 +86,10 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
         }))
     };
 
-    return <Paper className={classes.card} elevation={2}>
-        <Grid container justify={"space-between"} alignItems={"center"}>
-            <Grid item>
-                <Grid container alignItems={"center"}>
+    return <Paper className={clsx(classes.card, classes.fixWidth)} elevation={2}>
+        <Grid container justify={"space-between"} alignItems={"center"} className={classes.fixWidth}>
+            <Grid item xs={12} md={"auto"}>
+                <Grid container alignItems={"center"} className={clsx(classes.scroll,classes.fixWidth)}  wrap={"nowrap"}>
                     <Grid item className={classes.iconAndAddress}>
                         <Avatar className={classes.avatar}>
                             <AccountBalanceWalletIcon className={classes.icon}/>
@@ -96,8 +102,8 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item>
-                <Grid container alignItems={"center"}>
+            <Grid item xs={12} md={"auto"}>
+                <Grid container justify={"flex-end"}>
                     <Grid item className={classes.balanceAndDropdown}>
                         <Grid container direction={"column"} alignItems={"flex-end"}>
                             <Grid item>
@@ -142,7 +148,9 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
                         founds</Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"} className={classes.button}>List
+                    <Button variant={"contained"} className={classes.button}
+                            target={'_blank'}
+                            href={getTransactionListUrl(wallet.walletType, wallet.publicAddress)}>List
                         transactions</Button>
                 </Grid>
                 <Grid item>

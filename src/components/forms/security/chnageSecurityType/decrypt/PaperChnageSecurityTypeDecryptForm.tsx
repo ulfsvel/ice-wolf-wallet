@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import Wallet from "../../../../../types/Wallet";
+import Wallet, {PaperDecrypt} from "../../../../../types/Wallet";
 import {setWallet} from "../../../../../redux/actions/wallet";
 import PaperDecryptForm from "../../decrypt/PaperDecryptForm";
 
@@ -31,7 +31,8 @@ const PaperChangeSecurityTypeDecryptForm = ({wallet, dispatch}: PaperDecryptForm
         }))
     };
 
-    return <PaperDecryptForm wallet={wallet} updateWalletDecryptForm={updateWalletDecryptForm}/>
+    return <PaperDecryptForm state={wallet.state.changeSecurityType.state}
+                             data={wallet.state.changeSecurityType.data.currentCredentials as any as PaperDecrypt} updateWalletDecryptForm={updateWalletDecryptForm}/>
 };
 
 export default connect()(PaperChangeSecurityTypeDecryptForm);

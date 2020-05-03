@@ -4,7 +4,13 @@ import {
     UserRegisterFormData, UserResetFormData, UserResetRequestFormData
 } from "../types/User";
 import axios, {AxiosRequestConfig} from "axios";
-import Wallet, {StalesWallet, WalletSecurityTypeResult, WalletType} from "../types/Wallet";
+import Wallet, {
+    CreateWalletFormState,
+    CreateWalletResult,
+    StalesWallet,
+    WalletSecurityTypeResult,
+    WalletType
+} from "../types/Wallet";
 
 const apiUrl = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.trim() : 'http://localhost/';
 
@@ -65,7 +71,7 @@ export const transferFounds = async (accessToken: string, wallet: Wallet): Promi
 
     const urlType = wallet.walletType.toString().toLowerCase();
     const response = await axios.post(apiUrl + `api/${urlType}/transferFounds`, data, createConfig(accessToken));
-    return response.data.balance;
+    return response.data.transactionIdentifier;
 };
 
 export const changeSecurityType = async (accessToken: string, wallet: Wallet): Promise<WalletSecurityTypeResult> => {
@@ -79,4 +85,15 @@ export const changeSecurityType = async (accessToken: string, wallet: Wallet): P
     const urlType = wallet.walletType.toString().toLowerCase();
     const response = await axios.post(apiUrl + `api/${urlType}/updateWalletSecurity`, data, createConfig(accessToken));
     return response.data.auxiliaryData
+};
+
+export const createWallet = async (accessToken: string, form: CreateWalletFormState): Promise<CreateWalletResult> => {
+    const data = {
+        credentials: form.data.securityTypeData,
+        securityType: form.data.securityType
+    };
+
+    const urlType = form.data.type.toString().toLowerCase();
+    const response = await axios.post(apiUrl + `api/${urlType}/createWallet`, data, createConfig(accessToken));
+    return response.data
 };

@@ -15,9 +15,14 @@ export enum WalletType {
     ETH = "ETH", BTC = "BTC"
 }
 
+export const types = [WalletType.ETH, WalletType.BTC];
+
 export enum WalletSecurityType {
     ShamirBasic = "ShamirBasic", AesBasic = "AesBasic", Paper = "Paper", ShamirAdvanced = "ShamirAdvanced"
 }
+
+export const securityTypes = [WalletSecurityType.Paper, WalletSecurityType.ShamirBasic, WalletSecurityType.AesBasic, WalletSecurityType.ShamirAdvanced];
+
 
 export interface TransferFounds {
     to: string
@@ -107,6 +112,11 @@ export type WalletSecurityTypeResult =
     | ShamirAdvancedSecurityResult
     | null
 
+export interface CreateWalletResult {
+    wallet: StalesWallet
+    auxiliaryData: WalletSecurityTypeResult
+}
+
 export interface WalletState {
     getBalanceForm: {
         wasSubmitted: boolean
@@ -116,6 +126,7 @@ export interface WalletState {
     sendFoundsForm: {
         data: TransferFoundsFormData
         state: FormState
+        transactionIdentifier: string | null
     }
     changeSecurityType: {
         data: {
@@ -127,4 +138,17 @@ export interface WalletState {
         result: WalletSecurityTypeResult
     }
     isListingTabOpen: boolean
+}
+
+export interface CreateWalletFormState {
+    data: {
+        type: WalletType
+        securityType: WalletSecurityType
+        securityTypeData: WalletEncryptCredentials
+    }
+    state: FormState
+    result: {
+        data: WalletSecurityTypeResult,
+        securityType: WalletSecurityType
+    }
 }

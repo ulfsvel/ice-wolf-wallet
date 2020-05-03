@@ -1,7 +1,8 @@
 import TextField from "@material-ui/core/TextField";
 import React from "react";
 import {makeStyles, Theme} from "@material-ui/core";
-import Wallet, {AesBasicDecrypt} from "../../../../types/Wallet";
+import {AesBasicDecrypt} from "../../../../types/Wallet";
+import {FormState} from "../../../../types/misc";
 
 const useStyles = makeStyles((theme: Theme) => ({
     input: {
@@ -12,21 +13,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 
 interface AesBasicDecryptFormProps {
-    wallet: Wallet
+    state: FormState
+    data: AesBasicDecrypt
     updateWalletDecryptForm: (arg0: 'password') => (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const AesBasicDecryptForm = ({wallet, updateWalletDecryptForm}: AesBasicDecryptFormProps) => {
+const AesBasicDecryptForm = ({state, data, updateWalletDecryptForm}: AesBasicDecryptFormProps) => {
     const classes = useStyles();
-    const form = wallet.state.changeSecurityType.data.currentCredentials as unknown as AesBasicDecrypt;
 
     return <TextField
-        disabled={wallet.state.changeSecurityType.state.isSubmitting}
+        disabled={state.isSubmitting}
         className={classes.input}
         label={"Password"}
         fullWidth
         variant={"outlined"}
-        value={form.password}
+        value={data.password}
         onChange={updateWalletDecryptForm('password')}
     />
 };

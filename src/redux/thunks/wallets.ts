@@ -1,4 +1,6 @@
 import Wallet, {
+    CreateWalletFormState,
+    CreateWalletResult,
     StalesWallet,
     TransferFoundsFormData,
     WalletDecryptCredentials,
@@ -9,8 +11,8 @@ import Wallet, {
     WalletType
 } from "../../types/Wallet";
 import {State} from "../store";
-import {setWallet} from "../actions/wallet";
-import {changeSecurityType, getWalletWalletBalance, transferFounds} from "../../helpers/api-calls";
+import {setCreateWalletFormState, setWallet, setWallets} from "../actions/wallet";
+import {changeSecurityType, createWallet, getWalletWalletBalance, transferFounds} from "../../helpers/api-calls";
 
 const getDecryptFormDataByType = (type: WalletSecurityType): WalletDecryptCredentials => {
     switch (type) {
@@ -77,7 +79,8 @@ export const createWalletState = (wallet: StalesWallet): WalletState => {
                 isSubmitting: false,
                 isSuccess: false,
                 message: ''
-            }
+            },
+            transactionIdentifier: null
         },
         changeSecurityType: {
             data: {
@@ -178,14 +181,14 @@ export const transferFoundsThunk = (wallet: Wallet) => (dispatch: (arg0: any) =>
                     isSubmitting: true,
                     isSuccess: true,
                     message: '',
-                }
+                },
+                transactionIdentifier: null
             }
         }
     }));
-    transferFounds(user.accessToken, wallet).then((balance: string) => {
+    transferFounds(user.accessToken, wallet).then((transactionIdentifier: string) => {
         dispatch(setWallet({
             ...wallet,
-            lastKnownBalance: balance,
             state: {
                 ...wallet.state,
                 sendFoundsForm: {
@@ -194,7 +197,8 @@ export const transferFoundsThunk = (wallet: Wallet) => (dispatch: (arg0: any) =>
                         isSubmitting: false,
                         isSuccess: true,
                         message: 'Operation successful',
-                    }
+                    },
+                    transactionIdentifier: transactionIdentifier
                 }
             }
         }));
@@ -276,6 +280,64 @@ export const changeSecurityTypeThunk = (wallet: Wallet) => (dispatch: (arg0: any
                         message: 'Operation failed',
                     }
                 }
+            }
+        }));
+    });
+};
+
+export const createWalletThunk = (form: CreateWalletFormState) => (dispatch: (arg0: any) => void, getState: () => State) => {
+
+    const user = getState().user.appUser;
+    if (user === null) {
+        return;
+    }
+
+    dispatch(setCreateWalletFormState({
+        ...form,
+        state: {
+            ...form.state,
+            isSubmitting: true,
+            isSuccess: true,
+            message: '',
+        }
+    }));
+    createWallet(user.accessToken, form).then((result: CreateWalletResult) => {
+        const wallets = getState().wallet.wallets;
+
+        dispatch(setCreateWalletFormState({
+            ...form,
+            data: {
+                ...form.data,
+                securityTypeData: getEncryptFormDataByType(form.data.securityType)
+            },
+            state: {
+                isSubmitting: false,
+                isSuccess: true,
+                message: 'Operation successful',
+            },
+            result: {
+                data: result.auxiliaryData,
+                securityType: form.data.securityType
+            }
+        }));
+        dispatch(setWallets({
+            ...wallets,
+            [result.wallet.walletType]: {
+                ...wallets[result.wallet.walletType],
+                [result.wallet.publicAddress]: {
+                    ...result.wallet,
+                    state: createWalletState(result.wallet)
+                } as Wallet
+            }
+        }));
+    }).catch(() => {
+        dispatch(setCreateWalletFormState({
+            ...form,
+            state: {
+                ...form.state,
+                isSubmitting: false,
+                isSuccess: false,
+                message: 'Operation failed',
             }
         }));
     });

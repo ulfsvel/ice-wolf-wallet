@@ -1,7 +1,8 @@
 import TextField from "@material-ui/core/TextField";
 import React from "react";
 import {makeStyles, Theme} from "@material-ui/core";
-import Wallet, {PaperDecrypt} from "../../../../types/Wallet";
+import {PaperDecrypt} from "../../../../types/Wallet";
+import {FormState} from "../../../../types/misc";
 
 const useStyles = makeStyles((theme: Theme) => ({
     input: {
@@ -12,21 +13,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 
 interface PaperDecryptFormProps {
-    wallet: Wallet
+    state: FormState
+    data: PaperDecrypt
     updateWalletDecryptForm: (arg0: 'privateKey') => (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const PaperDecryptForm = ({wallet, updateWalletDecryptForm}: PaperDecryptFormProps) => {
+const PaperDecryptForm = ({state, data, updateWalletDecryptForm}: PaperDecryptFormProps) => {
     const classes = useStyles();
-    const form = wallet.state.changeSecurityType.data.currentCredentials as unknown as PaperDecrypt;
 
     return <TextField
-        disabled={wallet.state.changeSecurityType.state.isSubmitting}
+        disabled={state.isSubmitting}
         className={classes.input}
         label={"Private key"}
         fullWidth
         variant={"outlined"}
-        value={form.privateKey}
+        value={data.privateKey}
         onChange={updateWalletDecryptForm('privateKey')}
     />
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import Wallet from "../../../../../types/Wallet";
+import Wallet, {ShamirBasicDecrypt} from "../../../../../types/Wallet";
 import {setWallet} from "../../../../../redux/actions/wallet";
 import ShamirBasicDecryptForm from "../../decrypt/ShamirBasicDecryptForm";
 
@@ -30,7 +30,9 @@ const ShamirBasicChangeSecurityTypeDecryptForm = ({wallet, dispatch}: ShamirBasi
         }))
     };
 
-    return <ShamirBasicDecryptForm wallet={wallet} updateWalletDecryptForm={updateWalletDecryptForm}/>
+    return <ShamirBasicDecryptForm state={wallet.state.changeSecurityType.state}
+                                   data={wallet.state.changeSecurityType.data.currentCredentials as any as ShamirBasicDecrypt}
+                                   updateWalletDecryptForm={updateWalletDecryptForm}/>
 };
 
 export default connect()(ShamirBasicChangeSecurityTypeDecryptForm);

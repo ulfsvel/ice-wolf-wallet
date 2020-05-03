@@ -75,7 +75,9 @@ const ShamirAdvancedChangeSecurityTypeDecryptForm = ({wallet, dispatch}: ShamirA
         }
     };
 
-    return <ShamirAdvancedDecryptForm wallet={wallet} updateWalletDecryptFormShares={updateWalletDecryptFormShares}
+    return <ShamirAdvancedDecryptForm state={wallet.state.changeSecurityType.state}
+                                      data={wallet.state.changeSecurityType.data.currentCredentials as any as ShamirAdvancedDecrypt}
+                                      updateWalletDecryptFormShares={updateWalletDecryptFormShares}
                                       addWalletDecryptFormShare={addWalletDecryptFormShare}
                                       removeWalletDecryptFormShare={removeWalletDecryptFormShare}/>
 };

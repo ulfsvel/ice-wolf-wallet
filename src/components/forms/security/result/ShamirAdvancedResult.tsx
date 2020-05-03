@@ -1,5 +1,5 @@
 import React from "react";
-import Wallet, {ShamirAdvancedSecurityResult} from "../../../../types/Wallet";
+import {ShamirAdvancedSecurityResult} from "../../../../types/Wallet";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -17,16 +17,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface ShamirAdvancedResultProps {
-    wallet: Wallet
+    result: ShamirAdvancedSecurityResult
 }
 
-const ShamirAdvancedResult = ({wallet}: ShamirAdvancedResultProps) => {
+const ShamirAdvancedResult = ({result}: ShamirAdvancedResultProps) => {
     const classes = useStyles();
-
-    if (wallet.state.changeSecurityType.result === null) {
-        return null
-    }
-    const result = wallet.state.changeSecurityType.result as unknown as ShamirAdvancedSecurityResult;
 
     return <React.Fragment>
         <TableContainer component={Paper} className={classes.table}>

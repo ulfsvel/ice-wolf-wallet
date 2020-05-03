@@ -1,5 +1,5 @@
 import React from "react";
-import Wallet, {PaperSecurityResult} from "../../../../types/Wallet";
+import {PaperSecurityResult} from "../../../../types/Wallet";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
@@ -17,16 +17,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface PaperResultProps {
-    wallet: Wallet
+    result: PaperSecurityResult
 }
 
-const PaperResult = ({wallet}: PaperResultProps) => {
+const PaperResult = ({result}: PaperResultProps) => {
     const classes = useStyles();
-
-    if (wallet.state.changeSecurityType.result === null) {
-        return null
-    }
-    const result = wallet.state.changeSecurityType.result as unknown as PaperSecurityResult;
 
     return <TableContainer component={Paper} className={classes.table}>
         <Table>

@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
-import Wallet, {WalletSecurityType} from "../../../../types/Wallet";
+import Wallet, {PaperSecurityResult, ShamirAdvancedSecurityResult, WalletSecurityType} from "../../../../types/Wallet";
 import UserFormMessage from "../../../UserFormMessage";
 import Typography from "@material-ui/core/Typography";
 import {changeSecurityTypeThunk, getEncryptFormDataByType} from "../../../../redux/thunks/wallets";
@@ -56,11 +56,16 @@ const getEncryptForm = (wallet: Wallet) => {
 };
 
 const getResult = (wallet: Wallet) => {
+    const result = wallet.state.changeSecurityType.result;
+    if (result === null) {
+        return null;
+    }
+
     switch (wallet.walletSecurityType) {
         case WalletSecurityType.Paper:
-            return <PaperResult wallet={wallet}/>;
+            return <PaperResult result={result as any as PaperSecurityResult}/>;
         case WalletSecurityType.ShamirAdvanced:
-            return <ShamirAdvancedResult wallet={wallet}/>;
+            return <ShamirAdvancedResult result={result as any as ShamirAdvancedSecurityResult}/>;
         default:
             return null;
     }

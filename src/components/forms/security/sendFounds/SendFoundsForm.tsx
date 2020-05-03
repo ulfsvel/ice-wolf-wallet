@@ -10,7 +10,7 @@ import {setWallet} from "../../../../redux/actions/wallet";
 import UserFormMessage from "../../../UserFormMessage";
 import {State} from "../../../../redux/store";
 import Typography from "@material-ui/core/Typography";
-import {getCurrencyByWalletType} from "../../../../helpers/wallet";
+import {getCurrencyByWalletType, getTransactionUrl} from "../../../../helpers/wallet";
 import {transferFoundsThunk} from "../../../../redux/thunks/wallets";
 import AesBasicSendFoundsForm from "./AesBasicSendFoundsForm";
 import ShamirAdvancedSendFoundsForm from "./ShamirAdvancedSendFoundsForm";
@@ -67,10 +67,23 @@ const SendFoundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) => {
         dispatch(transferFoundsThunk(wallet))
     };
 
+    const checkTransactionButton = wallet.state.sendFoundsForm.transactionIdentifier === null ? null : (
+        <UserFormMessage
+            message={(<Button
+                variant="contained"
+                target={'_blank'}
+                href={getTransactionUrl(wallet.walletType, wallet.state.sendFoundsForm.transactionIdentifier)}
+            >
+                Check transaction
+            </Button>)}
+            isSuccess={true}
+        />);
+
     return <Grid container direction={"row"}>
         {!!wallet.state.sendFoundsForm.state.message &&
         <UserFormMessage message={wallet.state.sendFoundsForm.state.message}
                          isSuccess={wallet.state.sendFoundsForm.state.isSuccess}/>}
+        {checkTransactionButton}
         <Typography>
             Details
         </Typography>
@@ -102,7 +115,6 @@ const SendFoundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) => {
             disabled={wallet.state.sendFoundsForm.state.isSubmitting}
             className={classes.input}
             variant="contained"
-            component="label"
             color={"primary"}
             onClick={submitWalletDecryptForm}
         >

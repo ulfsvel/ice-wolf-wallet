@@ -2,10 +2,11 @@ import TextField from "@material-ui/core/TextField";
 import React from "react";
 import {makeStyles, Theme} from "@material-ui/core";
 import {connect} from "react-redux";
-import Wallet, {ShamirAdvancedDecrypt} from "../../../../types/Wallet";
+import {ShamirAdvancedDecrypt} from "../../../../types/Wallet";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import clsx from "clsx";
+import {FormState} from "../../../../types/misc";
 
 const useStyles = makeStyles((theme: Theme) => ({
     box: {
@@ -22,21 +23,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 
 interface ShamirAdvancedDecryptFormProps {
-    wallet: Wallet
+    state: FormState
+    data: ShamirAdvancedDecrypt
     updateWalletDecryptFormShares: (arg0: number) => (event: React.ChangeEvent<HTMLInputElement>) => void
     addWalletDecryptFormShare: () => void
     removeWalletDecryptFormShare: () => void
     dispatch: (arg0: any) => void,
 }
 
-const ShamirAdvancedDecryptForm = ({wallet, updateWalletDecryptFormShares, addWalletDecryptFormShare, removeWalletDecryptFormShare}: ShamirAdvancedDecryptFormProps) => {
+const ShamirAdvancedDecryptForm = ({state, data, updateWalletDecryptFormShares, addWalletDecryptFormShare, removeWalletDecryptFormShare}: ShamirAdvancedDecryptFormProps) => {
     const classes = useStyles();
-    const form = wallet.state.changeSecurityType.data.currentCredentials as unknown as ShamirAdvancedDecrypt;
 
     return <React.Fragment>
         <Box className={clsx(classes.box, classes.input)}>
             <Button
-                disabled={wallet.state.sendFoundsForm.state.isSubmitting}
+                disabled={state.isSubmitting}
                 className={classes.boxButton}
                 variant="contained"
                 component="label"
@@ -46,7 +47,7 @@ const ShamirAdvancedDecryptForm = ({wallet, updateWalletDecryptFormShares, addWa
                 Remove Share
             </Button>
             <Button
-                disabled={wallet.state.sendFoundsForm.state.isSubmitting}
+                disabled={state.isSubmitting}
                 variant="contained"
                 component="label"
                 color={"primary"}
@@ -55,10 +56,10 @@ const ShamirAdvancedDecryptForm = ({wallet, updateWalletDecryptFormShares, addWa
                 Add Share
             </Button>
         </Box>
-        {form.shares.map((share: string, key: number) => (
+        {data.shares.map((share: string, key: number) => (
             <TextField
                 key={key}
-                disabled={wallet.state.sendFoundsForm.state.isSubmitting}
+                disabled={state.isSubmitting}
                 className={classes.input}
                 label={"Share " + key}
                 fullWidth

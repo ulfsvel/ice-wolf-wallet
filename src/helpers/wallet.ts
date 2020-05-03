@@ -11,13 +11,20 @@ export const getCurrencyByWalletType = (walletType: WalletType): string => {
 
 export const getWalletType = (type: string): WalletType | null => {
     switch (type) {
-        case "ETH":
-            return WalletType.ETH;
         case "BTC":
             return WalletType.BTC;
+        case "ETH":
         default:
-            return null;
+            return WalletType.ETH;
     }
+};
+
+export const getWalletTypeWithDefault = (type: string): WalletType => {
+    const walletType = getWalletType(type);
+    if (walletType === null) {
+        return WalletType.ETH;
+    }
+    return walletType;
 };
 
 export const getWalletSecurityType = (type: string): WalletSecurityType => {
@@ -33,3 +40,30 @@ export const getWalletSecurityType = (type: string): WalletSecurityType => {
             return WalletSecurityType.Paper;
     }
 };
+
+const placeholder = '{:identifier}';
+const ethTransactionUrl = process.env.REACT_APP_ETH_TRANSACTION_URL || '';
+const btcTransactionUrl = process.env.REACT_APP_BTC_TRANSACTION_URL || '';
+
+export const getTransactionUrl = (type: WalletType, identifier: string) => {
+    switch (type) {
+        case WalletType.ETH:
+            return ethTransactionUrl.replace(placeholder, identifier);
+        case WalletType.BTC:
+            return btcTransactionUrl.replace(placeholder, identifier);
+    }
+};
+
+const ethTransactionListUrl = process.env.REACT_APP_ETH_TRANSACTION_LIST_URL || '';
+const btcTransactionListUrl = process.env.REACT_APP_BTC_TRANSACTION_LIST_URL || '';
+
+export const getTransactionListUrl = (type: WalletType, identifier: string) => {
+    switch (type) {
+        case WalletType.ETH:
+            return ethTransactionListUrl.replace(placeholder, identifier);
+        case WalletType.BTC:
+            return btcTransactionListUrl.replace(placeholder, identifier);
+    }
+};
+
+console.log(process.env);

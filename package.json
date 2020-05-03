@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-with-api": "set REACT_APP_API_URL=http://localhost:8080/ && react-scripts start",
+    "start-with-api": "set REACT_APP_API_URL=http://localhost:8080/ && set REACT_APP_ETH_TRANSACTION_URL=https://kovan.etherscan.io/tx/{:identifier} && set REACT_APP_ETH_TRANSACTION_LIST_URL=https://kovan.etherscan.io/address/{:identifier} && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

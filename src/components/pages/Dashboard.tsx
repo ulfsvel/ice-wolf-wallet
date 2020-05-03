@@ -57,13 +57,13 @@ const Dashboard = ({ethWallets, btcWallets, tabIndex, dispatch}: LoginFormProps)
         </Grid>
         <Grid item className={classes.fixForWidth}>
             <Grid container direction={"column"} className={classes.fixForWidth}>
-                <TabPanel value={tabIndex} index={0}>
+                <TabPanel value={tabIndex} index={0} className={classes.fixForWidth}>
                     <WalletList wallets={ethWallets}/>
                 </TabPanel>
-                <TabPanel value={tabIndex} index={1}>
+                <TabPanel value={tabIndex} index={1} className={classes.fixForWidth}>
                     <WalletList wallets={btcWallets}/>
                 </TabPanel>
-                <TabPanel value={tabIndex} index={2}>
+                <TabPanel value={tabIndex} index={2} className={classes.fixForWidth}>
                     <Options/>
                 </TabPanel>
             </Grid>

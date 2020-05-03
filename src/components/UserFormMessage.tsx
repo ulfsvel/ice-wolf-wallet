@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface UserFormMessageProps {
-    message: string,
+    message: React.ReactNode,
     isSuccess: boolean
 }
 

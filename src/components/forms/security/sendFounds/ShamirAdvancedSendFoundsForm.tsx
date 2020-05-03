@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import Wallet, {ShamirAdvancedTransferForm} from "../../../../types/Wallet";
+import Wallet, {ShamirAdvancedDecrypt, ShamirAdvancedTransferForm} from "../../../../types/Wallet";
 import {setWallet} from "../../../../redux/actions/wallet";
 import ShamirAdvancedDecryptForm from "../decrypt/ShamirAdvancedDecryptForm";
 
@@ -66,7 +66,9 @@ const ShamirAdvancedSendFoundsForm = ({wallet, dispatch}: ShamirAdvancedDecryptF
         }
     };
 
-    return <ShamirAdvancedDecryptForm wallet={wallet} updateWalletDecryptFormShares={updateWalletDecryptFormShares}
+    return <ShamirAdvancedDecryptForm state={wallet.state.sendFoundsForm.state}
+                                      data={wallet.state.sendFoundsForm.data as any as ShamirAdvancedDecrypt}
+                                      updateWalletDecryptFormShares={updateWalletDecryptFormShares}
                                       addWalletDecryptFormShare={addWalletDecryptFormShare}
                                       removeWalletDecryptFormShare={removeWalletDecryptFormShare}/>
 };
