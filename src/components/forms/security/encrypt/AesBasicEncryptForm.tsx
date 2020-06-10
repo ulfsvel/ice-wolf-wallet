@@ -27,6 +27,7 @@ const AesBasicEncryptForm = ({state, data, updateWalletEncryptForm}: AesBasicEnc
         label={"Password"}
         fullWidth
         variant={"outlined"}
+        type={"password"}
         value={data.password}
         onChange={updateWalletEncryptForm('password')}
     />

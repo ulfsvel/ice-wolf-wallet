@@ -5,14 +5,14 @@ import User, {
 } from "../../types/User";
 import {
     FAIL_LOGIN_FORM, FAIL_OPTIONS_FORM,
-    FAIL_REGISTER_FORM,
+    FAIL_REGISTER_FORM, FAIL_REQUEST_FORM,
     FAIL_RESET_FORM, FAIL_RESET_REQUEST_FORM,
     LOGIN_USER, LOGOUT_USER,
     SUBMIT_LOGIN_FORM, SUBMIT_OPTIONS_FORM,
-    SUBMIT_REGISTER_FORM,
+    SUBMIT_REGISTER_FORM, SUBMIT_REQUEST_FORM,
     SUBMIT_RESET_FORM, SUBMIT_RESET_REQUEST_FORM,
     SUCCESS_LOGIN_FORM, SUCCESS_OPTIONS_FORM,
-    SUCCESS_REGISTER_FORM,
+    SUCCESS_REGISTER_FORM, SUCCESS_REQUEST_FORM,
     SUCCESS_RESET_FORM, SUCCESS_RESET_REQUEST_FORM,
     UPDATE_LOGIN_FORM, UPDATE_OPTIONS_FORM,
     UPDATE_REGISTER_FORM,
@@ -84,6 +84,12 @@ export function submitOptionsForm() {
     }
 }
 
+export function submitRequestForm() {
+    return {
+        type: SUBMIT_REQUEST_FORM
+    }
+}
+
 export function failLoginForm(message: string | null = null) {
     return {
         type: FAIL_LOGIN_FORM,
@@ -119,6 +125,13 @@ export function failOptionsForm(message: string | null = null) {
     }
 }
 
+export function failRequestForm(message: string | null = null) {
+    return {
+        type: FAIL_REQUEST_FORM,
+        message
+    }
+}
+
 export function successLoginForm() {
     return {
         type: SUCCESS_LOGIN_FORM,
@@ -146,6 +159,12 @@ export function successResetForm() {
 export function successOptionsForm() {
     return {
         type: SUCCESS_OPTIONS_FORM,
+    }
+}
+
+export function successRequestForm() {
+    return {
+        type: SUCCESS_REQUEST_FORM,
     }
 }
 

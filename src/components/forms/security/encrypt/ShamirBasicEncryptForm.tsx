@@ -28,6 +28,7 @@ const ShamirBasicEncryptForm = ({state, data, updateWalletEncryptForm}: ShamirBa
         fullWidth
         variant={"outlined"}
         value={data.password}
+        type={"password"}
         onChange={updateWalletEncryptForm('password')}
     />
 };

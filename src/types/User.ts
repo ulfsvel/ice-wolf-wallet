@@ -51,6 +51,10 @@ export interface UserOptionsForm {
     form: FormState
 }
 
+export interface RequestConfirmTokenForm {
+    form: FormState
+}
+
 export interface AuthResponse {
     accessToken: string
 }

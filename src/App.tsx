@@ -18,6 +18,7 @@ import {State} from "./redux/store";
 import LoadingAnimation from "./components/LoadingAnimation";
 import ChangeSecurityType from "./components/pages/ChangeSecurityType";
 import TransferFounds from "./components/pages/TransferFounds";
+import RecoverWallet from "./components/pages/RecoverWallet";
 
 interface AppProps {
     app: AppState
@@ -56,6 +57,11 @@ const App = ({app, dispatch}: AppProps) => {
                 <PrivateRoute exact path="/change-security-type/:walletTypeString/:publicAddress">
                     <CenterOnPageWrapper>
                         <ChangeSecurityType/>
+                    </CenterOnPageWrapper>
+                </PrivateRoute>
+                <PrivateRoute exact path="/recover-wallet/:walletTypeString/:publicAddress">
+                    <CenterOnPageWrapper>
+                        <RecoverWallet/>
                     </CenterOnPageWrapper>
                 </PrivateRoute>
                 <PrivateRoute exact path="/">

@@ -2,7 +2,7 @@ import Avatar from "@material-ui/core/Avatar";
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import Button from "@material-ui/core/Button";
 import React from "react";
-import Wallet, {WalletSecurityType} from "../types/Wallet";
+import Wallet from "../types/Wallet";
 import {makeStyles, Theme} from "@material-ui/core";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
@@ -17,7 +17,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {updateWalletBalanceThunk} from "../redux/thunks/wallets";
 import {Link} from "react-router-dom";
-import {getCurrencyByWalletType, getTransactionListUrl} from "../helpers/wallet";
+import {getCurrencyByWalletType, getTransactionListUrl, isRecoveryAvailable} from "../helpers/wallet";
 import {setWallet} from "../redux/actions/wallet";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -59,10 +59,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-const isRecoveryAvailable = (walletSecurityType: WalletSecurityType): boolean => {
-    return walletSecurityType === WalletSecurityType.ShamirBasic;
-};
-
 interface WalletCardProps {
     wallet: Wallet,
     dispatch: (arg0: any) => void
@@ -89,7 +85,8 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
     return <Paper className={clsx(classes.card, classes.fixWidth)} elevation={2}>
         <Grid container justify={"space-between"} alignItems={"center"} className={classes.fixWidth}>
             <Grid item xs={12} md={"auto"}>
-                <Grid container alignItems={"center"} className={clsx(classes.scroll,classes.fixWidth)}  wrap={"nowrap"}>
+                <Grid container alignItems={"center"} className={clsx(classes.scroll, classes.fixWidth)}
+                      wrap={"nowrap"}>
                     <Grid item className={classes.iconAndAddress}>
                         <Avatar className={classes.avatar}>
                             <AccountBalanceWalletIcon className={classes.icon}/>
@@ -159,7 +156,8 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
                         security</Button>
                 </Grid>
                 {isRecoveryAvailable(wallet.walletSecurityType) && <Grid item>
-                    <Button variant={"contained"} className={classes.button}>Recover</Button>
+                    <Button variant={"contained"} className={classes.button} component={Link}
+                            to={`/recover-wallet/${wallet.walletType}/${wallet.publicAddress}`}>Recover</Button>
                 </Grid>}
             </Grid>
         </Collapse>

@@ -1,11 +1,15 @@
 import {WalletSecurityType, WalletType} from "../types/Wallet";
 
+export const isRecoveryAvailable = (walletSecurityType: WalletSecurityType): boolean => {
+    return walletSecurityType === WalletSecurityType.ShamirBasic;
+};
+
 export const getCurrencyByWalletType = (walletType: WalletType): string => {
     switch (walletType) {
         case WalletType.BTC:
-            return "SAT";
+            return "BTC";
         case WalletType.ETH:
-            return "WEI"
+            return "ETH"
     }
 };
 
@@ -65,5 +69,3 @@ export const getTransactionListUrl = (type: WalletType, identifier: string) => {
             return btcTransactionListUrl.replace(placeholder, identifier);
     }
 };
-
-console.log(process.env);

@@ -1,7 +1,7 @@
 import {
     authenticateUser,
     getUserWallets,
-    registerUser,
+    registerUser, requestConfirmToken,
     resetPassword,
     resetPasswordRequest, updateUser
 } from "../../helpers/api-calls";
@@ -14,14 +14,14 @@ import {
 } from "../../types/User";
 import {
     failLoginForm, failOptionsForm,
-    failRegisterForm, failResetForm,
+    failRegisterForm, failRequestForm, failResetForm,
     failResetRequestForm,
     loginUser, logoutUser,
     submitLoginForm, submitOptionsForm,
-    submitRegisterForm, submitResetForm,
+    submitRegisterForm, submitRequestForm, submitResetForm,
     submitResetRequestForm,
     successLoginForm, successOptionsForm,
-    successRegisterForm, successResetForm,
+    successRegisterForm, successRequestForm, successResetForm,
     successResetRequestForm,
 } from "../actions/users";
 import {clearStorage, setAccessToken} from "../../helpers/local-storage";
@@ -110,5 +110,20 @@ export const updateUserThunk = (userOptionsFormData: UserOptionsFormData) => (di
         dispatch(successOptionsForm())
     }).catch(() => {
         dispatch(failOptionsForm())
+    });
+};
+
+export const requestConfirmTokenThunk = () => (dispatch: (arg0: any) => void, getState: () => State) => {
+    const user = getState().user.appUser;
+    if (user === null) {
+        dispatch(failRequestForm());
+        return;
+    }
+
+    dispatch(submitRequestForm());
+    requestConfirmToken(user.accessToken).then(() => {
+        dispatch(successRequestForm())
+    }).catch(() => {
+        dispatch(failRequestForm())
     });
 };

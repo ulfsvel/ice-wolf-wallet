@@ -1,4 +1,5 @@
 import User, {
+    RequestConfirmTokenForm,
     UserLoginForm,
     UserOptionsForm,
     UserRegisterForm,
@@ -8,19 +9,19 @@ import User, {
 import {
     FAIL_LOGIN_FORM,
     FAIL_OPTIONS_FORM,
-    FAIL_REGISTER_FORM,
+    FAIL_REGISTER_FORM, FAIL_REQUEST_FORM,
     FAIL_RESET_FORM,
     FAIL_RESET_REQUEST_FORM,
     LOGIN_USER,
     LOGOUT_USER,
     SUBMIT_LOGIN_FORM,
     SUBMIT_OPTIONS_FORM,
-    SUBMIT_REGISTER_FORM,
+    SUBMIT_REGISTER_FORM, SUBMIT_REQUEST_FORM,
     SUBMIT_RESET_FORM,
     SUBMIT_RESET_REQUEST_FORM,
     SUCCESS_LOGIN_FORM,
     SUCCESS_OPTIONS_FORM,
-    SUCCESS_REGISTER_FORM,
+    SUCCESS_REGISTER_FORM, SUCCESS_REQUEST_FORM,
     SUCCESS_RESET_FORM,
     SUCCESS_RESET_REQUEST_FORM,
     UPDATE_LOGIN_FORM,
@@ -38,6 +39,7 @@ export interface UserState {
     resetRequestForm: UserResetRequestForm,
     resetForm: UserResetForm
     optionsForm: UserOptionsForm
+    confirmTokenRequestForm: RequestConfirmTokenForm
 }
 
 const emptyLoginForm = {
@@ -102,13 +104,22 @@ const emptyOptionsForm = {
     }
 };
 
+const confirmTokenRequestForm = {
+    form: {
+        isSubmitting: false,
+        isSuccess: true,
+        message: ''
+    }
+};
+
 const initialState: UserState = {
     appUser: null,
     loginForm: emptyLoginForm,
     registerForm: emptyRegisterForm,
     resetRequestForm: emptyResetRequestForm,
     resetForm: emptyResetForm,
-    optionsForm: emptyOptionsForm
+    optionsForm: emptyOptionsForm,
+    confirmTokenRequestForm: confirmTokenRequestForm
 };
 
 export default function usersReducer(state = initialState, action: UserTypes): UserState {
@@ -321,6 +332,41 @@ export default function usersReducer(state = initialState, action: UserTypes): U
                 ...state,
                 optionsForm: {
                     ...state.optionsForm,
+                    form: {
+                        isSubmitting: false,
+                        isSuccess: false,
+                        message: action.message === null ? "Operation failed" : action.message
+                    },
+                }
+            };
+        case SUBMIT_REQUEST_FORM:
+            return {
+                ...state,
+                confirmTokenRequestForm: {
+                    ...state.confirmTokenRequestForm,
+                    form: {
+                        ...state.optionsForm.form,
+                        isSubmitting: true,
+                    }
+                }
+            };
+        case SUCCESS_REQUEST_FORM:
+            return {
+                ...state,
+                confirmTokenRequestForm: {
+                    ...state.confirmTokenRequestForm,
+                    form: {
+                        isSubmitting: false,
+                        isSuccess: true,
+                        message: "Operation successful"
+                    },
+                }
+            };
+        case FAIL_REQUEST_FORM:
+            return {
+                ...state,
+                confirmTokenRequestForm: {
+                    ...state.confirmTokenRequestForm,
                     form: {
                         isSubmitting: false,
                         isSuccess: false,

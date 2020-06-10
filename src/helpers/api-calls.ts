@@ -49,6 +49,10 @@ export const updateUser = async (accessToken: string, data: UserOptionsFormData)
     await axios.post(apiUrl + 'api/user/update', data, createConfig(accessToken));
 };
 
+export const requestConfirmToken = async (accessToken: string): Promise<void> => {
+    await axios.post(apiUrl + 'api/user/requestConfirmToken', null, createConfig(accessToken));
+};
+
 export const getWalletWalletBalance = async (accessToken: string, publicAddress: string, type: WalletType): Promise<string> => {
     const urlType = type.toString().toLowerCase();
     const response = await axios.post(apiUrl + `api/${urlType}/getWalletBalance`, {publicAddress}, createConfig(accessToken));
@@ -84,6 +88,19 @@ export const changeSecurityType = async (accessToken: string, wallet: Wallet): P
 
     const urlType = wallet.walletType.toString().toLowerCase();
     const response = await axios.post(apiUrl + `api/${urlType}/updateWalletSecurity`, data, createConfig(accessToken));
+    return response.data.auxiliaryData
+};
+
+export const recoverWallet = async (accessToken: string, wallet: Wallet): Promise<WalletSecurityTypeResult> => {
+    const data = {
+        publicAddress: wallet.publicAddress,
+        recoverCredentials: wallet.state.recoverWallet.data.recoverCredentials,
+        newCredentials: wallet.state.recoverWallet.data.newCredentials,
+        newSecurityType: wallet.state.recoverWallet.data.newSecurityType
+    };
+
+    const urlType = wallet.walletType.toString().toLowerCase();
+    const response = await axios.post(apiUrl + `api/${urlType}/recoverWallet`, data, createConfig(accessToken));
     return response.data.auxiliaryData
 };
 

@@ -29,6 +29,25 @@ export interface TransferFounds {
     amount: string
 }
 
+export interface ShamirBasicRecoverCredentials {
+    confirmationCode: string
+}
+
+export interface ShamirAdvancedRecoverCredentials {
+}
+
+export interface AesBasicCredentials {
+}
+
+export interface PaperRecoverCredentials {
+}
+
+export type WalletRecoverCredentials =
+    | ShamirBasicRecoverCredentials
+    | ShamirAdvancedRecoverCredentials
+    | AesBasicCredentials
+    | PaperRecoverCredentials
+
 export interface ShamirBasicDecrypt {
     password: string
 }
@@ -73,6 +92,10 @@ export type TransferFoundsFormData =
     | AesBasicTransferForm
     | ShamirAdvancedTransferForm
 
+
+export interface ShamirBasicRecover {
+    confirmationCode: string
+}
 
 export interface ShamirBasicEncrypt {
     password: string
@@ -131,6 +154,15 @@ export interface WalletState {
     changeSecurityType: {
         data: {
             currentCredentials: WalletDecryptCredentials
+            newCredentials: WalletEncryptCredentials
+            newSecurityType: WalletSecurityType
+        }
+        state: FormState
+        result: WalletSecurityTypeResult
+    },
+    recoverWallet: {
+        data: {
+            recoverCredentials: WalletRecoverCredentials
             newCredentials: WalletEncryptCredentials
             newSecurityType: WalletSecurityType
         }

@@ -4,7 +4,7 @@ import Wallet, {
     StalesWallet,
     TransferFoundsFormData,
     WalletDecryptCredentials,
-    WalletEncryptCredentials,
+    WalletEncryptCredentials, WalletRecoverCredentials,
     WalletSecurityType,
     WalletSecurityTypeResult,
     WalletState,
@@ -12,7 +12,24 @@ import Wallet, {
 } from "../../types/Wallet";
 import {State} from "../store";
 import {setCreateWalletFormState, setWallet, setWallets} from "../actions/wallet";
-import {changeSecurityType, createWallet, getWalletWalletBalance, transferFounds} from "../../helpers/api-calls";
+import {
+    changeSecurityType,
+    createWallet,
+    getWalletWalletBalance,
+    recoverWallet,
+    transferFounds
+} from "../../helpers/api-calls";
+
+const getRecoverFormDataByType = (type: WalletSecurityType): WalletRecoverCredentials => {
+    switch (type) {
+        case WalletSecurityType.ShamirBasic:
+            return {
+                confirmationCode: ''
+            };
+        default:
+            return {};
+    }
+};
 
 const getDecryptFormDataByType = (type: WalletSecurityType): WalletDecryptCredentials => {
     switch (type) {
@@ -85,6 +102,19 @@ export const createWalletState = (wallet: StalesWallet): WalletState => {
         changeSecurityType: {
             data: {
                 currentCredentials: getDecryptFormDataByType(wallet.walletSecurityType),
+                newCredentials: getEncryptFormDataByType(WalletSecurityType.Paper),
+                newSecurityType: WalletSecurityType.Paper
+            },
+            state: {
+                isSubmitting: false,
+                isSuccess: false,
+                message: ''
+            },
+            result: null
+        },
+        recoverWallet: {
+            data: {
+                recoverCredentials: getRecoverFormDataByType(wallet.walletSecurityType),
                 newCredentials: getEncryptFormDataByType(WalletSecurityType.Paper),
                 newSecurityType: WalletSecurityType.Paper
             },
@@ -274,6 +304,67 @@ export const changeSecurityTypeThunk = (wallet: Wallet) => (dispatch: (arg0: any
                 ...wallet.state,
                 changeSecurityType: {
                     ...wallet.state.changeSecurityType,
+                    state: {
+                        isSubmitting: false,
+                        isSuccess: false,
+                        message: 'Operation failed',
+                    }
+                }
+            }
+        }));
+    });
+};
+
+export const recoverWalletThunk = (wallet: Wallet) => (dispatch: (arg0: any) => void, getState: () => State) => {
+
+    const user = getState().user.appUser;
+    if (user === null) {
+        return;
+    }
+
+    dispatch(setWallet({
+        ...wallet,
+        state: {
+            ...wallet.state,
+            recoverWallet: {
+                ...wallet.state.recoverWallet,
+                state: {
+                    isSubmitting: true,
+                    isSuccess: true,
+                    message: '',
+                }
+            }
+        }
+    }));
+    recoverWallet(user.accessToken, wallet).then((result: WalletSecurityTypeResult) => {
+        dispatch(setWallet({
+            ...wallet,
+            walletSecurityType: wallet.state.changeSecurityType.data.newSecurityType,
+            state: {
+                ...wallet.state,
+                recoverWallet: {
+                    ...wallet.state.recoverWallet,
+                    data: {
+                        recoverCredentials: getRecoverFormDataByType(wallet.state.changeSecurityType.data.newSecurityType),
+                        newCredentials: getEncryptFormDataByType(WalletSecurityType.Paper),
+                        newSecurityType: WalletSecurityType.Paper
+                    },
+                    result: [WalletSecurityType.Paper, WalletSecurityType.ShamirAdvanced].includes(wallet.state.changeSecurityType.data.newSecurityType) ? result : null,
+                    state: {
+                        isSubmitting: false,
+                        isSuccess: true,
+                        message: 'Operation successful',
+                    }
+                }
+            }
+        }));
+    }).catch(() => {
+        dispatch(setWallet({
+            ...wallet,
+            state: {
+                ...wallet.state,
+                recoverWallet: {
+                    ...wallet.state.recoverWallet,
                     state: {
                         isSubmitting: false,
                         isSuccess: false,

@@ -11,11 +11,13 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import Paper from "@material-ui/core/Paper";
 import OptionsForm from "./forms/OptionsForm";
+import RequestTokenForm from "./forms/RequestTokenForm"
 import {logoutUserThunk} from "../redux/thunks/users";
 import TabPanel from "./TabPanel";
 import {State} from "../redux/store";
 import {setOptionsTab} from "../redux/actions/app";
 import CreateWalletForm from "./forms/security/createWallet/CreateWalletForm";
+import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import clsx from "clsx";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -74,6 +76,14 @@ const Options = ({tabIndex, dispatch}: OptionsProps) => {
                                 primary="Edit account"
                             />
                         </ListItem>
+                        <ListItem selected={tabIndex === 2} button onClick={handleTabClick(2)}>
+                            <ListItemIcon>
+                                <ConfirmationNumberIcon/>
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="Request confirmation code"
+                            />
+                        </ListItem>
                         <ListItem button onClick={handleLogout}>
                             <ListItemIcon>
                                 <ExitToAppIcon/>
@@ -94,6 +104,9 @@ const Options = ({tabIndex, dispatch}: OptionsProps) => {
                             </TabPanel>
                             <TabPanel value={tabIndex} index={1}>
                                 <OptionsForm/>
+                            </TabPanel>
+                            <TabPanel value={tabIndex} index={2}>
+                                <RequestTokenForm/>
                             </TabPanel>
                         </Paper>
                     </Grid>

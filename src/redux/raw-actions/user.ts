@@ -29,6 +29,10 @@ export const SUBMIT_OPTIONS_FORM = "SUBMIT_OPTIONS_FORM";
 export const FAIL_OPTIONS_FORM = "FAIL_OPTIONS_FORM";
 export const SUCCESS_OPTIONS_FORM = "SUCCESS_OPTIONS_FORM";
 
+export const SUBMIT_REQUEST_FORM = "SUBMIT_REQUEST_FORM";
+export const FAIL_REQUEST_FORM = "FAIL_REQUEST_FORM";
+export const SUCCESS_REQUEST_FORM = "SUCCESS_REQUEST_FORM";
+
 export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 
@@ -133,6 +137,19 @@ export interface SuccessOptionsForm {
     type: typeof SUCCESS_OPTIONS_FORM
 }
 
+export interface SubmitRequestForm {
+    type: typeof SUBMIT_REQUEST_FORM
+}
+
+export interface FailRequestForm {
+    type: typeof FAIL_REQUEST_FORM,
+    message: string | null
+}
+
+export interface SuccessRequestForm {
+    type: typeof SUCCESS_REQUEST_FORM
+}
+
 export interface LoginUser {
     type: typeof LOGIN_USER,
     user: User
@@ -170,3 +187,7 @@ export type UserTypes =
     | SubmitOptionsForm
     | FailOptionsForm
     | SuccessOptionsForm
+
+    | SubmitRequestForm
+    | FailRequestForm
+    | SuccessRequestForm
