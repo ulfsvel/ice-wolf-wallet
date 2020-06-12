@@ -17,11 +17,11 @@ const ShamirBasicRecoverWalletForm = ({wallet, dispatch}: ShamirBasicDecryptForm
             state: {
                 ...wallet.state,
                 recoverWallet: {
-                    ...wallet.state.changeSecurityType,
+                    ...wallet.state.recoverWallet,
                     data: {
-                        ...wallet.state.changeSecurityType.data,
+                        ...wallet.state.recoverWallet.data,
                         recoverCredentials: {
-                            ...wallet.state.changeSecurityType.data.currentCredentials,
+                            ...wallet.state.recoverWallet.data.recoverCredentials,
                             [key]: event.target.value
                         }
                     }

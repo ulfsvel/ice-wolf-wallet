@@ -11,7 +11,7 @@ import {getEncryptFormDataByType, recoverWalletThunk} from "../../../../redux/th
 import MenuItem from "@material-ui/core/MenuItem";
 import {setWallet} from "../../../../redux/actions/wallet";
 import TextField from "@material-ui/core/TextField";
-import {getWalletSecurityType} from "../../../../helpers/wallet";
+import {getWalletSecurityType, isRecoveryAvailable} from "../../../../helpers/wallet";
 import PaperResult from "../result/PaperResult";
 import ShamirAdvancedResult from "../result/ShamirAdvancedResult";
 import ShamirBasicRecoverWalletForm from "./recover/ShamirBasicRecoverWalletForm";
@@ -122,7 +122,7 @@ const RecoverWalletForm = ({wallet, dispatch}: ChangeSecurityTypeFormProps) => {
         {getEncryptForm(wallet)}
         <Button
             fullWidth
-            disabled={wallet.state.recoverWallet.state.isSubmitting}
+            disabled={wallet.state.recoverWallet.state.isSubmitting || !isRecoveryAvailable(wallet.walletSecurityType)}
             className={classes.input}
             variant="contained"
             component="label"

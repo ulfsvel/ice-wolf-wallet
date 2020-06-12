@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Wallet, {WalletType} from "../../types/Wallet";
-import {getWalletType, isRecoveryAvailable} from "../../helpers/wallet";
+import {getWalletType} from "../../helpers/wallet";
 import RecoverWalletForm from "../forms/security/recoverWallet/RecoverWalletForm";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -49,10 +49,6 @@ const RecoverWallet = ({wallets}: RecoverWalletProps) => {
 
     const wallet = wallets[walletType as WalletType][publicAddress as string] as Wallet;
     if (!wallet) {
-        return <Redirect to="/"/>
-    }
-
-    if (!isRecoveryAvailable(wallet.walletSecurityType)) {
         return <Redirect to="/"/>
     }
 

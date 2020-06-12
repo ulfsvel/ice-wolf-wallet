@@ -339,17 +339,17 @@ export const recoverWalletThunk = (wallet: Wallet) => (dispatch: (arg0: any) => 
     recoverWallet(user.accessToken, wallet).then((result: WalletSecurityTypeResult) => {
         dispatch(setWallet({
             ...wallet,
-            walletSecurityType: wallet.state.changeSecurityType.data.newSecurityType,
+            walletSecurityType: wallet.state.recoverWallet.data.newSecurityType,
             state: {
                 ...wallet.state,
                 recoverWallet: {
                     ...wallet.state.recoverWallet,
                     data: {
-                        recoverCredentials: getRecoverFormDataByType(wallet.state.changeSecurityType.data.newSecurityType),
+                        recoverCredentials: getRecoverFormDataByType(wallet.state.recoverWallet.data.newSecurityType),
                         newCredentials: getEncryptFormDataByType(WalletSecurityType.Paper),
                         newSecurityType: WalletSecurityType.Paper
                     },
-                    result: [WalletSecurityType.Paper, WalletSecurityType.ShamirAdvanced].includes(wallet.state.changeSecurityType.data.newSecurityType) ? result : null,
+                    result: [WalletSecurityType.Paper, WalletSecurityType.ShamirAdvanced].includes(wallet.state.recoverWallet.data.newSecurityType) ? result : null,
                     state: {
                         isSubmitting: false,
                         isSuccess: true,
