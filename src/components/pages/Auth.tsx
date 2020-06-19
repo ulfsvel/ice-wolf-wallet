@@ -1,5 +1,5 @@
 import React from "react";
-import {makeStyles} from "@material-ui/core";
+import {makeStyles, Theme} from "@material-ui/core";
 import User from "../../types/User";
 import {State} from "../../redux/store"
 import {connect} from "react-redux";
@@ -16,7 +16,7 @@ import ResetForm from "../forms/ResetRequestForm";
 import TabPanel from "../TabPanel";
 import {setAuthTab} from "../../redux/actions/app";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
     card: {
         maxWidth: 500,
         width: 500,
@@ -38,6 +38,7 @@ interface LandingProps {
 
 const Auth = ({user, tabIndex, dispatch}: LandingProps) => {
     const classes = useStyles();
+    const year = new Date().getFullYear();
 
     const handleTabChange = (event: React.ChangeEvent<{}>, tabIndex: number) => {
         dispatch(setAuthTab(tabIndex));
@@ -53,17 +54,24 @@ const Auth = ({user, tabIndex, dispatch}: LandingProps) => {
             <Card>
                 <CardContent>
                     <Typography variant={"h4"}>
-                        Disclaimer
+                        Copyright & Disclaimer
                     </Typography>
                     <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum placerat nulla fringilla
-                        neque volutpat porta. Nunc posuere, libero id venenatis imperdiet, magna magna pulvinar lectus,
-                        non lacinia augue orci vel sapien. In a viverra massa. Mauris ultrices, libero non dapibus
-                        hendrerit, enim tellus aliquet odio, sit amet porta urna sem et tortor. Pellentesque sagittis
-                        condimentum augue in tincidunt. Cras sed sapien a ipsum auctor pulvinar et eget ipsum. Fusce vel
-                        orci malesuada, pretium urna convallis, lacinia lacus. Aenean risus urna, interdum ac viverra
-                        sed, commodo ut nisl. Quisque elit urna, volutpat vel lobortis non, egestas nec leo. Sed
-                        consectetur sed augue vel egestas.
+                        Copyright (C) {year} Botici Alexandru
+                        <br/>
+                        This program is free software: you can redistribute it and/or modify
+                        it under the terms of the GNU General Public License as published by
+                        the Free Software Foundation, either version 3 of the License, or
+                        (at your option) any later version.
+                        <br/>
+                        This program is distributed in the hope that it will be useful,
+                        but WITHOUT ANY WARRANTY; without even the implied warranty of
+                        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+                        GNU General Public License for more details.
+                        <br/>
+                        You should have received a copy of the GNU General Public License
+                        along with this program. If not, see <a
+                        href={"https://www.gnu.org/licenses/"}>https://www.gnu.org/licenses/</a>
                     </Typography>
                 </CardContent>
             </Card>
