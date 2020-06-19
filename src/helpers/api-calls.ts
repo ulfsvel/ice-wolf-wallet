@@ -39,7 +39,7 @@ export const getUserWallets = async (accessToken: string): Promise<Array<StalesW
 };
 
 export const resetPassword = async (data: UserResetFormData): Promise<void> => {
-    await axios.post(apiUrl + 'api/public/user/resetForm', {
+    await axios.post(apiUrl + 'api/public/user/reset', {
         token: data.resetToken,
         password: data.password
     });
