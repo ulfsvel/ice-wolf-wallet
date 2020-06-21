@@ -9,16 +9,16 @@ interface ShamirBasicDecryptFormProps {
     dispatch: (arg0: any) => void,
 }
 
-const ShamirBasicSentFoundsForm = ({wallet, dispatch}: ShamirBasicDecryptFormProps) => {
+const ShamirBasicSentFundsForm = ({wallet, dispatch}: ShamirBasicDecryptFormProps) => {
     const updateWalletDecryptForm = (key: "password") => (event: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(setWallet({
             ...wallet,
             state: {
                 ...wallet.state,
-                sendFoundsForm: {
-                    ...wallet.state.sendFoundsForm,
+                sendFundsForm: {
+                    ...wallet.state.sendFundsForm,
                     data: {
-                        ...wallet.state.sendFoundsForm.data,
+                        ...wallet.state.sendFundsForm.data,
                         [key]: event.target.value
                     }
                 }
@@ -26,9 +26,9 @@ const ShamirBasicSentFoundsForm = ({wallet, dispatch}: ShamirBasicDecryptFormPro
         }))
     };
 
-    return <ShamirBasicDecryptForm state={wallet.state.sendFoundsForm.state}
-                                   data={wallet.state.sendFoundsForm.data as any as ShamirBasicDecrypt}
+    return <ShamirBasicDecryptForm state={wallet.state.sendFundsForm.state}
+                                   data={wallet.state.sendFundsForm.data as any as ShamirBasicDecrypt}
                                    updateWalletDecryptForm={updateWalletDecryptForm}/>
 };
 
-export default connect()(ShamirBasicSentFoundsForm);
+export default connect()(ShamirBasicSentFundsForm);

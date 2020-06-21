@@ -141,8 +141,8 @@ const WalletCard = ({wallet, dispatch}: WalletCardProps) => {
                 </Grid>
                 <Grid item>
                     <Button variant={"contained"} className={classes.button} component={Link}
-                            to={`/transfer-founds/${wallet.walletType}/${wallet.publicAddress}`}>Transfer
-                        founds</Button>
+                            to={`/transfer-funds/${wallet.walletType}/${wallet.publicAddress}`}>Transfer
+                        funds</Button>
                 </Grid>
                 <Grid item>
                     <Button variant={"contained"} className={classes.button}

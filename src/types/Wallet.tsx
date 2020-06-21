@@ -24,7 +24,7 @@ export enum WalletSecurityType {
 export const securityTypes = [WalletSecurityType.Paper, WalletSecurityType.ShamirBasic, WalletSecurityType.AesBasic, WalletSecurityType.ShamirAdvanced];
 
 
-export interface TransferFounds {
+export interface TransferFunds {
     to: string
     amount: string
 }
@@ -70,24 +70,24 @@ export type WalletDecryptCredentials =
     | ShamirAdvancedDecrypt
     | PaperDecrypt
 
-export interface PaperTransferFoundsForm extends TransferFounds, PaperDecrypt {
+export interface PaperTransferFundsForm extends TransferFunds, PaperDecrypt {
 
 }
 
-export interface ShamirBasicTransferForm extends TransferFounds, ShamirBasicDecrypt {
+export interface ShamirBasicTransferForm extends TransferFunds, ShamirBasicDecrypt {
 
 }
 
-export interface AesBasicTransferForm extends TransferFounds, AesBasicDecrypt {
+export interface AesBasicTransferForm extends TransferFunds, AesBasicDecrypt {
 
 }
 
-export interface ShamirAdvancedTransferForm extends TransferFounds, ShamirAdvancedDecrypt {
+export interface ShamirAdvancedTransferForm extends TransferFunds, ShamirAdvancedDecrypt {
 
 }
 
-export type TransferFoundsFormData =
-    | PaperTransferFoundsForm
+export type TransferFundsFormData =
+    | PaperTransferFundsForm
     | ShamirBasicTransferForm
     | AesBasicTransferForm
     | ShamirAdvancedTransferForm
@@ -146,8 +146,8 @@ export interface WalletState {
         isSuccess: boolean
         isSubmitting: boolean
     }
-    sendFoundsForm: {
-        data: TransferFoundsFormData
+    sendFundsForm: {
+        data: TransferFundsFormData
         state: FormState
         transactionIdentifier: string | null
     }

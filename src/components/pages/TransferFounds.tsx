@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Wallet, {WalletType} from "../../types/Wallet";
-import SendFoundsForm from "../forms/security/sendFounds/SendFoundsForm";
+import SendFundsForm from "../forms/security/sendFunds/SendFundsForm";
 import {getWalletType} from "../../helpers/wallet";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -25,12 +25,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-interface TransferFoundsProps {
+interface TransferFundsProps {
     dispatch: (arg0: any) => void
     wallets: Record<WalletType, Record<string, Wallet>>
 }
 
-const TransferFounds = ({wallets}: TransferFoundsProps) => {
+const TransferFunds = ({wallets}: TransferFundsProps) => {
     const classes = useStyles();
     let {walletTypeString, publicAddress} = useParams();
 
@@ -59,11 +59,11 @@ const TransferFounds = ({wallets}: TransferFoundsProps) => {
                     <Grid container direction={"column"} className={classes.cardContent} justify={"space-between"}>
                         <Grid item className={classes.fixForWidth}>
                             <Typography variant={"h4"}>
-                                Transfer founds - {wallet.walletType}
+                                Transfer funds - {wallet.walletType}
                             </Typography>
                         </Grid>
                         <Grid item className={classes.fixForWidth}>
-                            <SendFoundsForm wallet={wallet}/>
+                            <SendFundsForm wallet={wallet}/>
                         </Grid>
                     </Grid>
                 </CardContent>
@@ -76,4 +76,4 @@ const mapStateToProps = (state: State) => ({
     wallets: state.wallet.wallets
 });
 
-export default connect(mapStateToProps)(TransferFounds);
+export default connect(mapStateToProps)(TransferFunds);

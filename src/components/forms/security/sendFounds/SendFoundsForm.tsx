@@ -11,11 +11,11 @@ import UserFormMessage from "../../../UserFormMessage";
 import {State} from "../../../../redux/store";
 import Typography from "@material-ui/core/Typography";
 import {getCurrencyByWalletType, getTransactionUrl} from "../../../../helpers/wallet";
-import {transferFoundsThunk} from "../../../../redux/thunks/wallets";
-import AesBasicSendFoundsForm from "./AesBasicSendFoundsForm";
-import ShamirAdvancedSendFoundsForm from "./ShamirAdvancedSendFoundsForm";
-import ShamirBasicSentFoundsForm from "./ShamirBasicSentFoundsForm";
-import PaperSendFoundsForm from "./PaperSendFoundsForm";
+import {transferFundsThunk} from "../../../../redux/thunks/wallets";
+import AesBasicSendFundsForm from "./AesBasicSendFundsForm";
+import ShamirAdvancedSendFundsForm from "./ShamirAdvancedSendFundsForm";
+import ShamirBasicSentFundsForm from "./ShamirBasicSentFundsForm";
+import PaperSendFundsForm from "./PaperSendFundsForm";
 
 const useStyles = makeStyles((theme: Theme) => ({
     input: {
@@ -27,13 +27,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 const getForm = (wallet: Wallet) => {
     switch (wallet.walletSecurityType) {
         case WalletSecurityType.Paper:
-            return <PaperSendFoundsForm wallet={wallet}/>;
+            return <PaperSendFundsForm wallet={wallet}/>;
         case WalletSecurityType.ShamirBasic:
-            return <ShamirBasicSentFoundsForm wallet={wallet}/>;
+            return <ShamirBasicSentFundsForm wallet={wallet}/>;
         case WalletSecurityType.AesBasic:
-            return <AesBasicSendFoundsForm wallet={wallet}/>;
+            return <AesBasicSendFundsForm wallet={wallet}/>;
         case WalletSecurityType.ShamirAdvanced:
-            return <ShamirAdvancedSendFoundsForm wallet={wallet}/>;
+            return <ShamirAdvancedSendFundsForm wallet={wallet}/>;
     }
 };
 
@@ -42,19 +42,19 @@ interface AesBasicDecryptFormProps {
     dispatch: (arg0: any) => void,
 }
 
-const SendFoundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) => {
+const SendFundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) => {
     const classes = useStyles();
-    const form = wallet.state.sendFoundsForm as unknown as AesBasicTransferForm;
+    const form = wallet.state.sendFundsForm as unknown as AesBasicTransferForm;
 
     const updateWalletDecryptForm = (key: 'to' | 'amount') => (event: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(setWallet({
             ...wallet,
             state: {
                 ...wallet.state,
-                sendFoundsForm: {
-                    ...wallet.state.sendFoundsForm,
+                sendFundsForm: {
+                    ...wallet.state.sendFundsForm,
                     data: {
-                        ...wallet.state.sendFoundsForm.data,
+                        ...wallet.state.sendFundsForm.data,
                         [key]: event.target.value
                     }
                 }
@@ -64,15 +64,15 @@ const SendFoundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) => {
 
 
     const submitWalletDecryptForm = () => {
-        dispatch(transferFoundsThunk(wallet))
+        dispatch(transferFundsThunk(wallet))
     };
 
-    const checkTransactionButton = wallet.state.sendFoundsForm.transactionIdentifier === null ? null : (
+    const checkTransactionButton = wallet.state.sendFundsForm.transactionIdentifier === null ? null : (
         <UserFormMessage
             message={(<Button
                 variant="contained"
                 target={'_blank'}
-                href={getTransactionUrl(wallet.walletType, wallet.state.sendFoundsForm.transactionIdentifier)}
+                href={getTransactionUrl(wallet.walletType, wallet.state.sendFundsForm.transactionIdentifier)}
             >
                 Check transaction
             </Button>)}
@@ -80,15 +80,15 @@ const SendFoundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) => {
         />);
 
     return <Grid container direction={"row"}>
-        {!!wallet.state.sendFoundsForm.state.message &&
-        <UserFormMessage message={wallet.state.sendFoundsForm.state.message}
-                         isSuccess={wallet.state.sendFoundsForm.state.isSuccess}/>}
+        {!!wallet.state.sendFundsForm.state.message &&
+        <UserFormMessage message={wallet.state.sendFundsForm.state.message}
+                         isSuccess={wallet.state.sendFundsForm.state.isSuccess}/>}
         {checkTransactionButton}
         <Typography>
             Details
         </Typography>
         <TextField
-            disabled={wallet.state.sendFoundsForm.state.isSubmitting}
+            disabled={wallet.state.sendFundsForm.state.isSubmitting}
             className={classes.input}
             label={"To address"}
             fullWidth
@@ -97,7 +97,7 @@ const SendFoundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) => {
             onChange={updateWalletDecryptForm('to')}
         />
         <TextField
-            disabled={wallet.state.sendFoundsForm.state.isSubmitting}
+            disabled={wallet.state.sendFundsForm.state.isSubmitting}
             className={classes.input}
             label={"Amount in " + getCurrencyByWalletType(wallet.walletType)}
             fullWidth
@@ -112,13 +112,13 @@ const SendFoundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) => {
         {getForm(wallet)}
         <Button
             fullWidth
-            disabled={wallet.state.sendFoundsForm.state.isSubmitting}
+            disabled={wallet.state.sendFundsForm.state.isSubmitting}
             className={classes.input}
             variant="contained"
             color={"primary"}
             onClick={submitWalletDecryptForm}
         >
-            {wallet.state.sendFoundsForm.state.isSubmitting ? <CircularProgress size={24}/> : "Send"}
+            {wallet.state.sendFundsForm.state.isSubmitting ? <CircularProgress size={24}/> : "Send"}
         </Button>
     </Grid>
 };
@@ -127,4 +127,4 @@ const mapStateToProps = (state: State) => ({
     loginForm: state.user.loginForm
 });
 
-export default connect(mapStateToProps)(SendFoundsForm);
+export default connect(mapStateToProps)(SendFundsForm);

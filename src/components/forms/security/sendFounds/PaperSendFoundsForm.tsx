@@ -10,16 +10,16 @@ interface PaperFormProps {
     dispatch: (arg0: any) => void,
 }
 
-const PaperSendFoundsForm = ({wallet, dispatch}: PaperFormProps) => {
+const PaperSendFundsForm = ({wallet, dispatch}: PaperFormProps) => {
     const updateWalletDecryptForm = (key: "privateKey") => (event: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(setWallet({
             ...wallet,
             state: {
                 ...wallet.state,
-                sendFoundsForm: {
-                    ...wallet.state.sendFoundsForm,
+                sendFundsForm: {
+                    ...wallet.state.sendFundsForm,
                     data: {
-                        ...wallet.state.sendFoundsForm.data,
+                        ...wallet.state.sendFundsForm.data,
                         [key]: event.target.value
                     }
                 }
@@ -28,8 +28,8 @@ const PaperSendFoundsForm = ({wallet, dispatch}: PaperFormProps) => {
     };
 
 
-    return <PaperDecryptForm state={wallet.state.sendFoundsForm.state}
-                             data={wallet.state.sendFoundsForm.data as any as PaperDecrypt} updateWalletDecryptForm={updateWalletDecryptForm}/>
+    return <PaperDecryptForm state={wallet.state.sendFundsForm.state}
+                             data={wallet.state.sendFundsForm.data as any as PaperDecrypt} updateWalletDecryptForm={updateWalletDecryptForm}/>
 };
 
-export default connect()(PaperSendFoundsForm);
+export default connect()(PaperSendFundsForm);

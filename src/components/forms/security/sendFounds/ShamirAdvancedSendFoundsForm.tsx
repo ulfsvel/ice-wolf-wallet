@@ -10,8 +10,8 @@ interface ShamirAdvancedDecryptFormProps {
     dispatch: (arg0: any) => void,
 }
 
-const ShamirAdvancedSendFoundsForm = ({wallet, dispatch}: ShamirAdvancedDecryptFormProps) => {
-    const form = wallet.state.sendFoundsForm as unknown as ShamirAdvancedTransferForm;
+const ShamirAdvancedSendFundsForm = ({wallet, dispatch}: ShamirAdvancedDecryptFormProps) => {
+    const form = wallet.state.sendFundsForm as unknown as ShamirAdvancedTransferForm;
 
     const updateWalletDecryptFormShares = (key: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const shares = form.shares.map((value: string, arrayKey: number) => key === arrayKey ? event.target.value : value);
@@ -19,10 +19,10 @@ const ShamirAdvancedSendFoundsForm = ({wallet, dispatch}: ShamirAdvancedDecryptF
             ...wallet,
             state: {
                 ...wallet.state,
-                sendFoundsForm: {
-                    ...wallet.state.sendFoundsForm,
+                sendFundsForm: {
+                    ...wallet.state.sendFundsForm,
                     data: {
-                        ...wallet.state.sendFoundsForm.data,
+                        ...wallet.state.sendFundsForm.data,
                         shares: shares
                     }
                 }
@@ -36,10 +36,10 @@ const ShamirAdvancedSendFoundsForm = ({wallet, dispatch}: ShamirAdvancedDecryptF
             ...wallet,
             state: {
                 ...wallet.state,
-                sendFoundsForm: {
-                    ...wallet.state.sendFoundsForm,
+                sendFundsForm: {
+                    ...wallet.state.sendFundsForm,
                     data: {
-                        ...wallet.state.sendFoundsForm.data,
+                        ...wallet.state.sendFundsForm.data,
                         shares: shares
                     }
                 }
@@ -54,10 +54,10 @@ const ShamirAdvancedSendFoundsForm = ({wallet, dispatch}: ShamirAdvancedDecryptF
                 ...wallet,
                 state: {
                     ...wallet.state,
-                    sendFoundsForm: {
-                        ...wallet.state.sendFoundsForm,
+                    sendFundsForm: {
+                        ...wallet.state.sendFundsForm,
                         data: {
-                            ...wallet.state.sendFoundsForm.data,
+                            ...wallet.state.sendFundsForm.data,
                             shares: shares
                         }
                     }
@@ -66,11 +66,11 @@ const ShamirAdvancedSendFoundsForm = ({wallet, dispatch}: ShamirAdvancedDecryptF
         }
     };
 
-    return <ShamirAdvancedDecryptForm state={wallet.state.sendFoundsForm.state}
-                                      data={wallet.state.sendFoundsForm.data as any as ShamirAdvancedDecrypt}
+    return <ShamirAdvancedDecryptForm state={wallet.state.sendFundsForm.state}
+                                      data={wallet.state.sendFundsForm.data as any as ShamirAdvancedDecrypt}
                                       updateWalletDecryptFormShares={updateWalletDecryptFormShares}
                                       addWalletDecryptFormShare={addWalletDecryptFormShare}
                                       removeWalletDecryptFormShare={removeWalletDecryptFormShare}/>
 };
 
-export default connect()(ShamirAdvancedSendFoundsForm);
+export default connect()(ShamirAdvancedSendFundsForm);

@@ -9,16 +9,16 @@ interface AesBasicDecryptFormProps {
     dispatch: (arg0: any) => void,
 }
 
-const AesBasicSendFoundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) => {
+const AesBasicSendFundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) => {
     const updateWalletDecryptForm = (key: "password") => (event: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(setWallet({
             ...wallet,
             state: {
                 ...wallet.state,
-                sendFoundsForm: {
-                    ...wallet.state.sendFoundsForm,
+                sendFundsForm: {
+                    ...wallet.state.sendFundsForm,
                     data: {
-                        ...wallet.state.sendFoundsForm.data,
+                        ...wallet.state.sendFundsForm.data,
                         [key]: event.target.value
                     }
                 }
@@ -26,9 +26,9 @@ const AesBasicSendFoundsForm = ({wallet, dispatch}: AesBasicDecryptFormProps) =>
         }))
     };
 
-    return <AesBasicDecryptForm state={wallet.state.sendFoundsForm.state}
-                                data={wallet.state.sendFoundsForm.data as any as AesBasicDecrypt}
+    return <AesBasicDecryptForm state={wallet.state.sendFundsForm.state}
+                                data={wallet.state.sendFundsForm.data as any as AesBasicDecrypt}
                                 updateWalletDecryptForm={updateWalletDecryptForm}/>
 };
 
-export default connect()(AesBasicSendFoundsForm);
+export default connect()(AesBasicSendFundsForm);

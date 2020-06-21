@@ -2,7 +2,7 @@ import Wallet, {
     CreateWalletFormState,
     CreateWalletResult,
     StalesWallet,
-    TransferFoundsFormData,
+    TransferFundsFormData,
     WalletDecryptCredentials,
     WalletEncryptCredentials, WalletRecoverCredentials,
     WalletSecurityType,
@@ -17,7 +17,7 @@ import {
     createWallet,
     getWalletWalletBalance,
     recoverWallet,
-    transferFounds
+    transferFunds
 } from "../../helpers/api-calls";
 
 const getRecoverFormDataByType = (type: WalletSecurityType): WalletRecoverCredentials => {
@@ -54,7 +54,7 @@ const getDecryptFormDataByType = (type: WalletSecurityType): WalletDecryptCreden
     }
 };
 
-const getTransferFoundsFormDataByType = (type: WalletSecurityType): TransferFoundsFormData => {
+const getTransferFundsFormDataByType = (type: WalletSecurityType): TransferFundsFormData => {
     return {
         ...getDecryptFormDataByType(type),
         to: '',
@@ -90,8 +90,8 @@ export const createWalletState = (wallet: StalesWallet): WalletState => {
             isSuccess: true,
             isSubmitting: false
         },
-        sendFoundsForm: {
-            data: getTransferFoundsFormDataByType(wallet.walletSecurityType),
+        sendFundsForm: {
+            data: getTransferFundsFormDataByType(wallet.walletSecurityType),
             state: {
                 isSubmitting: false,
                 isSuccess: false,
@@ -194,7 +194,7 @@ export const updateWalletBalanceThunk = (type: WalletType, publicAddress: string
     });
 };
 
-export const transferFoundsThunk = (wallet: Wallet) => (dispatch: (arg0: any) => void, getState: () => State) => {
+export const transferFundsThunk = (wallet: Wallet) => (dispatch: (arg0: any) => void, getState: () => State) => {
 
     const user = getState().user.appUser;
     if (user === null) {
@@ -205,8 +205,8 @@ export const transferFoundsThunk = (wallet: Wallet) => (dispatch: (arg0: any) =>
         ...wallet,
         state: {
             ...wallet.state,
-            sendFoundsForm: {
-                ...wallet.state.sendFoundsForm,
+            sendFundsForm: {
+                ...wallet.state.sendFundsForm,
                 state: {
                     isSubmitting: true,
                     isSuccess: true,
@@ -216,13 +216,13 @@ export const transferFoundsThunk = (wallet: Wallet) => (dispatch: (arg0: any) =>
             }
         }
     }));
-    transferFounds(user.accessToken, wallet).then((transactionIdentifier: string) => {
+    transferFunds(user.accessToken, wallet).then((transactionIdentifier: string) => {
         dispatch(setWallet({
             ...wallet,
             state: {
                 ...wallet.state,
-                sendFoundsForm: {
-                    data: getTransferFoundsFormDataByType(wallet.walletSecurityType),
+                sendFundsForm: {
+                    data: getTransferFundsFormDataByType(wallet.walletSecurityType),
                     state: {
                         isSubmitting: false,
                         isSuccess: true,
@@ -233,16 +233,16 @@ export const transferFoundsThunk = (wallet: Wallet) => (dispatch: (arg0: any) =>
             }
         }));
         dispatch(updateWalletBalanceThunk(wallet.walletType, wallet.publicAddress));
-        if (Object.keys(getState().wallet.wallets[wallet.walletType]).includes(wallet.state.sendFoundsForm.data.to)) {
-            dispatch(updateWalletBalanceThunk(wallet.walletType, wallet.state.sendFoundsForm.data.to));
+        if (Object.keys(getState().wallet.wallets[wallet.walletType]).includes(wallet.state.sendFundsForm.data.to)) {
+            dispatch(updateWalletBalanceThunk(wallet.walletType, wallet.state.sendFundsForm.data.to));
         }
     }).catch(() => {
         dispatch(setWallet({
             ...wallet,
             state: {
                 ...wallet.state,
-                sendFoundsForm: {
-                    ...wallet.state.sendFoundsForm,
+                sendFundsForm: {
+                    ...wallet.state.sendFundsForm,
                     state: {
                         isSubmitting: false,
                         isSuccess: false,

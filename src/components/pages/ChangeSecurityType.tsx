@@ -25,12 +25,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-interface TransferFoundsProps {
+interface TransferFundsProps {
     dispatch: (arg0: any) => void
     wallets: Record<WalletType, Record<string, Wallet>>
 }
 
-const ChangeSecurityType = ({wallets}: TransferFoundsProps) => {
+const ChangeSecurityType = ({wallets}: TransferFundsProps) => {
     const classes = useStyles();
     let {walletTypeString, publicAddress} = useParams();
 
