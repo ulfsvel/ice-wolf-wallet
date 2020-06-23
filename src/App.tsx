@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
     BrowserRouter,
     Switch,
@@ -26,9 +26,14 @@ interface AppProps {
 }
 
 const App = ({app, dispatch}: AppProps) => {
+    useEffect(() => {
+        if (!app.isInitialised) {
+            dispatch(initAppThunk());
+        }
+    }, [app, dispatch]);
+
 
     if (!app.isInitialised) {
-        dispatch(initAppThunk());
         return <ThemeWrapper>
             <Wrapper>
                 <LoadingAnimation/>
